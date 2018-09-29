@@ -66,7 +66,6 @@ export default {
   methods: {
     registerUser() {
       if (this.isValidPassword && this.user.email.length > 1) {
-        console.log(JSON.stringify(this.user));
         axios
           .post(baseUrl + "/auth/register", this.user)
           .then(response => {

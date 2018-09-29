@@ -2,7 +2,7 @@
 <div>
 <b-navbar id="navbar" toggleable="md" type="dark" fixed="top">
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-  <b-navbar-brand href="#/">Coffee-App</b-navbar-brand>
+  <b-navbar-brand href="#/">Coffee-App</b-navbar-brand> 
   <b-collapse is-nav id="nav_collapse">
 
     <b-navbar-nav class="ml-auto">

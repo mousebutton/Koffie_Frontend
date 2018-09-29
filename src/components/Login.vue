@@ -4,7 +4,7 @@
     <h4>Login</h4>
     <p id="loginError" v-if="hasLoginError">Bad credentials</p>
 
-    <b-form id="loginForm" @submit="login">
+    <b-form id="loginForm" @submit.prevent="login">
       <b-form-group>
         <b-form-input  
           placeholder="Enter your email adress" 
@@ -50,7 +50,8 @@ export default {
       getUserData () {
        axios
         .get(baseUrl + "/users/who", 
-            { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token')}})
+            { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+          })
         .then(response => {
             console.log(response);
         })
@@ -59,7 +60,8 @@ export default {
         });
       },
 
-      login () {
+      login (e) {
+        console.log(e);
          axios
             .post(baseUrl + "/auth/login", this.user)
             .then(response => {

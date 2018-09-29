@@ -1,10 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app"> 
     <Navigation></Navigation>
-    <img src="https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/assets/spring-boot-vuejs-logo.png?raw=true"/>
-    <div>
-</div>
+  
+ <div id="test">
+    <img src="/static/coffee-cup.png"/>
     <router-view></router-view>
+ </div>
   </div>
 </template>
 
@@ -27,5 +28,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#test{
+
+  margin-top: 100px;
 }
 </style>
