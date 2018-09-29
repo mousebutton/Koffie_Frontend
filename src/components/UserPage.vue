@@ -15,53 +15,49 @@ import axios from "axios";
 const baseUrl = "http://localhost:8080/api";
 
 export default {
-  name: 'UserPage',
+  name: "UserPage",
 
-   data() {
+  data() {
     return {
       user: {
         company: 0,
         email: "",
         password: "",
-        roles: [{role: ""}],
-        coffeeGroups: [{name: ""}]
+        roles: [{ role: "" }],
+        coffeeGroups: [{ name: "" }]
       }
     };
   },
 
   methods: {
-      
-       getUserData () {
-       axios
-        .get(baseUrl + "/users/who", { 
-            headers: { 
-                        'Authorization': 'Bearer ' + localStorage.getItem('token'),
-                       
-                      },
-            })
+    getUserData() {
+      axios
+        .get(baseUrl + "/users/who", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
         .then(response => {
-            this.user.email = response.data.email;
-            this.user.roles = response.data.roles;
-            this.user.coffeeGroups = response.data.coffeeGroups;
+          this.user.email = response.data.email;
+          this.user.roles = response.data.roles;
+          this.user.coffeeGroups = response.data.coffeeGroups;
         })
         .catch(error => {
           // The token is invalid or expired
-          if (error.response.status === 500){
-              // remove the token from the storage and redirect to login page
-              localStorage.clear();
-              this.$router.push("/login");
-            }
+          if (error.response.status === 500) {
+            // remove the token from the storage and redirect to login page
+            localStorage.clear();
+            this.$router.push("/login");
+          }
         });
-      },
-          
-      },
-
-    // Fetch user data before rendering component
-    beforeMount() {
-      this.getUserData();
     }
-  }
+  },
 
+  // Fetch user data before rendering component
+  beforeMount() {
+    this.getUserData();
+  }
+};
 </script>
 <style>
 </style>
