@@ -85,31 +85,5 @@ export default {
   width: 60%;
 }
 
-@media screen and (max-width: 770px) {
-  #loginForm {
-    width: 100%;
-  }
-}
-
-#loginSuccess{
-  color: green;
-}
-
-#loginError{
-  color: red;
-}
-
-#submitButton{
-  background-color: #57BC90;
-  border: none;
-}
-
-#submitButton:hover{
-  background-color: rgb(30, 148, 97);
-}
-
-#registerLink{
-  color: #57BC90;
-}
 
 </style>
