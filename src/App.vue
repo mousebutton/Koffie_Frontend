@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navigation></Navigation>
-    <img src="https://github.com/jonashackt/spring-boot-vuejs/blob/master/frontend/src/assets/spring-boot-vuejs-logo.png?raw=true"/>
+
     <div>
 </div>
     <router-view></router-view>

@@ -6,6 +6,8 @@ import Contact from '@/components/Contact'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import UserPage from '@/components/UserPage'
+import Canvas from '@/components/Canvas'
+
 
 Vue.use(Router)
 
@@ -35,6 +37,11 @@ export default new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/canvas',
+      name: 'Canvas',
+      component: Canvas
     },
     {
       path: '/profile',
