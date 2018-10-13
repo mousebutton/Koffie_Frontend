@@ -27,26 +27,6 @@
                                             </div>
                                         </div>
                                         <hr />
-                                        
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Firstname</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                <b-form-input v-model="user.firstName"></b-form-input>
-                                            </div>
-                                        </div>
-                                        <hr />
-
-                                          <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Lastname</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                <b-form-input v-model="user.lastName"></b-form-input>
-                                            </div>
-                                        </div>
-                                        <hr />
 
                                     </div>
                                 </div>
@@ -98,6 +78,7 @@ export default {
           }
         })
         .then(response => {
+            console.log(response);
          this.user = UserParser.responseToUser(response, this.user);
         })
         .catch(error => {
