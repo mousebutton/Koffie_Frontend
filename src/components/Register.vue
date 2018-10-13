@@ -26,7 +26,7 @@
         <b-form-invalid-feedback>Enter at least 6 characters</b-form-invalid-feedback>
       </b-form-group>
 
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button id="submitButton" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger" @click="clearForm">Reset</b-button>
     </b-form>
 
@@ -102,5 +102,14 @@ export default {
   #registerForm {
     width: 100%;
   }
+}
+
+#submitButton{
+  background-color: #57BC90;
+  border: none;
+}
+
+#submitButton:hover{
+  background-color: rgb(30, 148, 97);
 }
 </style>

@@ -7,6 +7,7 @@ import router from './router'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Home from '@/components/Home'
 
 Vue.use(BootstrapVue, axios)
 Vue.config.productionTip = false
@@ -16,5 +17,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: { App, Home }
 })

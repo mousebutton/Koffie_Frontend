@@ -2,13 +2,12 @@
 <div>
 <b-navbar id="navbar" toggleable="md" type="dark" fixed="top">
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-  <b-navbar-brand href="#/">Coffee-App</b-navbar-brand> 
+  <b-navbar-brand href="#/">Coffee-App</b-navbar-brand>
+   <img src="/static/logo.png"/>
   <b-collapse is-nav id="nav_collapse">
-
     <b-navbar-nav class="ml-auto">
       <b-nav-item-dropdown right>
-     
-        <template slot="button-content">User</template>
+        <template slot="button-content"> <img src="/static/user-icon.png"/></template>
         <b-dropdown-item @click="goto">Profile</b-dropdown-item>
         <b-dropdown-item @click="logout">Logout</b-dropdown-item>
       </b-nav-item-dropdown>
@@ -37,6 +36,7 @@ export default {
   },
 
   methods: {
+    // TODO notify server so the token can be destroyed
     logout() {
       localStorage.clear();
       this.$router.push("/");
@@ -62,7 +62,7 @@ export default {
 <style>
  
 #navbar{
-  background-color:#57BC90;
+  background-color:#2aa68b;
   font-size: 20px;
 }
 
@@ -78,7 +78,7 @@ export default {
   width: 100%;
   z-index: 9999;
   border-radius: 0px;
-  background-color: #57BC90;
+  background-color: #2aa68b;
   color:white;
   font-size: 20px;
 }

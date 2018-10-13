@@ -31,51 +31,50 @@
 
 <script>
 import axios from "axios";
+
 const baseUrl = "http://localhost:8080/api";
 
 export default {
   name: "Login",
 
-   data() {
+  data() {
     return {
       user: {
         email: "",
-        password: "",
+        password: ""
       },
       hasLoginError: false
     };
   },
 
   methods: {
-      getUserData () {
-       axios
-        .get(baseUrl + "/users/who", 
-            { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
-          })
+    getUserData() {
+      axios
+        .get(baseUrl + "/users/who", {
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+        })
         .then(response => {
-            console.log(response);
+          console.log(response);
         })
         .catch(error => {
           console.log(error);
         });
-      },
+    },
 
-      login (e) {
-        console.log(e);
-         axios
-            .post(baseUrl + "/auth/login", this.user)
-            .then(response => {
-              console.log(response);
-                localStorage.setItem('token', response.data.accessToken);
-                this.isLoggedIn = true;
-                this.$router.push('/profile');
+    login() {
+      axios
+        .post(baseUrl + "/auth/login", this.user)
+        .then(response => {
+          localStorage.setItem("token", response.data.accessToken);
+          this.isLoggedIn = true;
+          this.$router.push("/profile");
         })
         .catch(error => {
-            if (error.response.status === 401){
-              this.hasLoginError = true;
-            }
+          if (error.response.status === 401) {
+            this.hasLoginError = true;
+          }
         });
-      }
+    },
   }
 };
 </script>
@@ -93,25 +92,24 @@ export default {
   }
 }
 
-#loginSuccess{
+#loginSuccess {
   color: green;
 }
 
-#loginError{
+#loginError {
   color: red;
 }
 
-#submitButton{
-  background-color: #57BC90;
+#submitButton {
+  background-color: #57bc90;
   border: none;
 }
 
-#submitButton:hover{
+#submitButton:hover {
   background-color: rgb(30, 148, 97);
 }
 
-#registerLink{
-  color: #57BC90;
+#registerLink {
+  color: #57bc90;
 }
-
 </style>

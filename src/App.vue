@@ -1,9 +1,7 @@
 <template>
   <div id="app"> 
     <Navigation></Navigation>
-  
  <div id="test">
-    <img src="/static/coffee-cup.png"/>
     <router-view></router-view>
  </div>
   </div>
