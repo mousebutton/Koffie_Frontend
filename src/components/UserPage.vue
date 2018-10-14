@@ -45,7 +45,7 @@
 <script>
 import axios from "axios";
 import Home from "@/components/Home";
-import UserParser from '@/util/UserParser';
+import UserParser from "@/util/UserParser";
 
 const baseUrl = "http://localhost:8080/api";
 
@@ -78,8 +78,8 @@ export default {
           }
         })
         .then(response => {
-            console.log(response);
-         this.user = UserParser.responseToUser(response, this.user);
+          console.log(response);
+          this.user = UserParser.responseToUser(response, this.user);
         })
         .catch(error => {
           // The token is invalid or expired
@@ -88,8 +88,7 @@ export default {
             this.$router.push("/login");
           }
         });
-    },
-
+    }
   },
 
   // Fetch user data before rendering component
@@ -101,7 +100,7 @@ export default {
 
 <style>
 body {
-  background-color: #F8F8F8 ;
+  background-color: #f8f8f8;
 }
 
 .image-container {
@@ -124,5 +123,4 @@ body {
 .image-container:hover .middle {
   opacity: 1;
 }
-
 </style>
