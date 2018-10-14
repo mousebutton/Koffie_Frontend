@@ -26,15 +26,30 @@
                                                 <b-form-input v-model="user.email"></b-form-input>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Firstname</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                <b-form-input v-model="user.firstName"></b-form-input>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Lastname</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                <b-form-input v-model="user.lastName"></b-form-input>
+                                            </div>
+                                        </div>
                                         <hr />
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                      <b-button variant="success">Save</b-button>
-
+                      <b-button @click="updateUser" variant="success">Save</b-button>
                     </div>
                 </div>
             </div>
@@ -59,6 +74,9 @@ export default {
   data() {
     return {
       user: {
+        id: 0,
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         firstName: "",
@@ -87,6 +105,24 @@ export default {
             localStorage.clear();
             this.$router.push("/login");
           }
+        });
+    },
+    updateUser() {
+      axios
+        .put(baseUrl + "/users/user", this.user, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          this.user.email = response.data.email;
+          this.user.roles = response.data.roles;
+          this.user.coffeeGroups = response.data.coffeeGroups;
+          this.user.firstName = response.data.firstName;
+          this.user.lastName = response.data.lastName;
+        })
+        .catch(error => {
+          console.log(error);
         });
     }
   },
