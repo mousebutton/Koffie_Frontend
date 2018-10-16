@@ -28,15 +28,30 @@
                                                 <b-form-input disabled v-model="user.email"></b-form-input>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Firstname</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                <b-form-input v-model="user.firstName"></b-form-input>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-3 col-md-2 col-5">
+                                                <label style="font-weight:bold;">Lastname</label>
+                                            </div>
+                                            <div class="col-md-8 col-6">
+                                                <b-form-input v-model="user.lastName"></b-form-input>
+                                            </div>
+                                        </div>
                                         <hr />
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                      <b-button variant="success">Save</b-button>
-
+                      <b-button @click="updateUser" variant="success">Save</b-button>
                     </div>
                 </div>
             </div>
@@ -48,7 +63,6 @@
 import axios from "axios";
 import Home from "@/components/Home";
 import UserParser from "@/util/UserParser";
-import FormData from "form-data";
 
 const baseUrl = "http://localhost:8080/api";
 const maxAvatarByteSize = 200000; //  = 200kb
@@ -131,6 +145,21 @@ export default {
             localStorage.clear();
             this.$router.push("/login");
           }
+        });
+    },
+
+    updateUser() {
+      axios
+        .put(baseUrl + "/users/user", this.user, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          this.user = UserParser.responseToUser(response, this.user);
+        })
+        .catch(error => {
+          console.log(error);
         });
     }
   },
