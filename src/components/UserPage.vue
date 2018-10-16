@@ -8,7 +8,9 @@
                         <div class="card-title mb-4">
                             <div class="d-flex justify-content-start">
                                 <div class="image-container">
-                                    <img src="http://placehold.it/150x150"  id="imgProfile" style="width: 150px; height: 150px" class="img-thumbnail" />
+                                    <b-img rounded="circle" :src="user.avatar" @click="openFileInput" id="avatar" style="width: 125px; height: 125px" class="img-thumbnail" />
+                                    <span>Change avatar</span>
+                                    <input type="file" accept="image/*" id="imgupload" style="display:none" @change="onFileSelected" /> 
                                 </div>
                             </div>
                         </div>
@@ -17,13 +19,13 @@
                             <div class="col-12">
                                 <div class="tab-content ml-1" id="myTabContent">
                                     <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
-                                        
+                                                <label id="errorMessage">{{errorMsg}}</label>
                                         <div class="row">
                                             <div class="col-sm-3 col-md-2 col-5">
                                                 <label style="font-weight:bold;">E-mail</label>
                                             </div>
                                             <div class="col-md-8 col-6">
-                                                <b-form-input v-model="user.email"></b-form-input>
+                                                <b-form-input disabled v-model="user.email"></b-form-input>
                                             </div>
                                         </div>
                                         <hr />
@@ -45,9 +47,12 @@
 <script>
 import axios from "axios";
 import Home from "@/components/Home";
-import UserParser from '@/util/UserParser';
+import UserParser from "@/util/UserParser";
+import FormData from "form-data";
 
 const baseUrl = "http://localhost:8080/api";
+const maxAvatarByteSize = 200000; //  = 200kb
+const avatarFileToLargeMsg = 'Max avatar size is 200kb';
 
 export default {
   components: {
@@ -59,17 +64,57 @@ export default {
   data() {
     return {
       user: {
+        id: 0,
         email: "",
         password: "",
         firstName: "",
         lastName: "",
+        shortName: "",
+        avatar: "",
         roles: [{ role: "" }],
         coffeeGroups: [{ name: "" }]
-      }
+      },
+
+      errorMsg: null
     };
   },
 
   methods: {
+    openFileInput() {
+      document.getElementById("imgupload").click();
+    },
+
+    onFileSelected(event) {
+      this.errorMsg = null;
+      var preview = document.getElementById("avatar");
+      var file = event.target.files[0];
+      var reader = new FileReader();
+
+      if (file.size < maxAvatarByteSize) {
+        reader.readAsDataURL(file);
+
+        reader.onload = event => {
+          this.user.avatar = reader.result;
+          preview.src = reader.result;
+          this.uploadAvatar();
+        };
+      }
+      else {
+        this.errorMsg = avatarFileToLargeMsg;
+      }
+    },
+
+    uploadAvatar() {
+      axios
+        .post(baseUrl + "/users/avatar", this.user)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
     getUserData() {
       axios
         .get(baseUrl + "/users/who", {
@@ -78,8 +123,7 @@ export default {
           }
         })
         .then(response => {
-            console.log(response);
-         this.user = UserParser.responseToUser(response, this.user);
+          this.user = UserParser.responseToUser(response, this.user);
         })
         .catch(error => {
           // The token is invalid or expired
@@ -88,8 +132,7 @@ export default {
             this.$router.push("/login");
           }
         });
-    },
-
+    }
   },
 
   // Fetch user data before rendering component
@@ -101,28 +144,32 @@ export default {
 
 <style>
 body {
-  background-color: #F8F8F8 ;
+  background-color: #f8f8f8;
 }
 
 .image-container {
   position: relative;
 }
 
-.image {
-  opacity: 1;
+#avatar:hover {
+  cursor: pointer;
+}
+
+div.image-container span {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #333;
+  color: #fff;
+}
+
+#errorMessage {
+  color: red;
+}
+
+div.image-container:hover span {
   display: block;
-  width: 100%;
-  height: auto;
-  transition: 0.5s ease;
-  backface-visibility: hidden;
 }
-
-.image-container:hover .image {
-  opacity: 0.3;
-}
-
-.image-container:hover .middle {
-  opacity: 1;
-}
-
 </style>
