@@ -3,55 +3,48 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-
-                    <div class="card-body">
-                        <div class="card-title mb-4">
-                            <div class="d-flex justify-content-start">
+                    <div class="card-body">               
+                        <div class="row">
                                 <div class="image-container">
                                     <b-img rounded="circle" :src="user.avatar" @click="openFileInput" id="avatar" style="width: 125px; height: 125px" class="img-thumbnail" />
                                     <span>Change avatar</span>
                                     <input type="file" accept="image/*" id="imgupload" style="display:none" @change="onFileSelected" /> 
-                                </div>
-                            </div>
+                                </div>             
                         </div>
 
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="tab-content ml-1" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="basicInfo" role="tabpanel" aria-labelledby="basicInfo-tab">
-                                                <label id="errorMessage">{{errorMsg}}</label>
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">E-mail</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                <b-form-input disabled v-model="user.email"></b-form-input>
-                                            </div>
-                                        </div>
+                              <h6 id="errorMessage">{{errorMsg}}</h6>   
 
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Firstname</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                <b-form-input v-model="user.firstName"></b-form-input>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3 col-md-2 col-5">
-                                                <label style="font-weight:bold;">Lastname</label>
-                                            </div>
-                                            <div class="col-md-8 col-6">
-                                                <b-form-input v-model="user.lastName"></b-form-input>
-                                            </div>
-                                        </div>
-                                        <hr />
+                        <form>
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Email</label>
+                              <div class="col-sm-10">
+                                <input type="email"  readonly class="form-control" v-model="user.email">
+                              </div>
+                          </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      <b-button @click="updateUser" variant="success">Save</b-button>
+                          <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Firstname</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" v-model="user.firstName">
+                              </div>
+                          </div>
+
+                           <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Lastname</label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" v-model="user.lastName">
+                              </div>
+                          </div>
+
+                          <div class="form-group row"  v-for="department in user.departments">
+                            <label class="col-sm-2 col-form-label">Afdeling</label>
+                              <div class="col-sm-10">
+                                <input type="text" disabled class="form-control" v-model="department.name">
+                              </div>
+                          </div>
+                          
+                          <button type="button" class="btn btn-info" @click="updateUser">Save</button>
+                        </form>   
                     </div>
                 </div>
             </div>
@@ -66,7 +59,7 @@ import UserParser from "@/util/UserParser";
 
 const baseUrl = "http://localhost:8080/api";
 const maxAvatarByteSize = 200000; //  = 200kb
-const avatarFileToLargeMsg = 'Max avatar size is 200kb';
+const avatarFileToLargeMsg = "Max avatar size is 200kb";
 
 export default {
   components: {
@@ -74,6 +67,7 @@ export default {
   },
 
   name: "UserPage",
+
 
   data() {
     return {
@@ -86,10 +80,11 @@ export default {
         shortName: "",
         avatar: "",
         roles: [{ role: "" }],
-        coffeeGroups: [{ name: "" }]
+        departments: [{ name: "" }]
       },
 
-      errorMsg: null
+      errorMsg: null,
+
     };
   },
 
@@ -105,6 +100,7 @@ export default {
       var reader = new FileReader();
 
       if (file.size < maxAvatarByteSize) {
+        
         reader.readAsDataURL(file);
 
         reader.onload = event => {
@@ -112,8 +108,7 @@ export default {
           preview.src = reader.result;
           this.uploadAvatar();
         };
-      }
-      else {
+      } else {
         this.errorMsg = avatarFileToLargeMsg;
       }
     },
@@ -122,29 +117,10 @@ export default {
       axios
         .post(baseUrl + "/users/avatar", this.user)
         .then(response => {
-          console.log(response);
+          localStorage.setItem('user', JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
-        });
-    },
-
-    getUserData() {
-      axios
-        .get(baseUrl + "/users/who", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
-        .then(response => {
-          this.user = UserParser.responseToUser(response, this.user);
-        })
-        .catch(error => {
-          // The token is invalid or expired
-          if (error.response.status === 500) {
-            localStorage.clear();
-            this.$router.push("/login");
-          }
         });
     },
 
@@ -156,17 +132,16 @@ export default {
           }
         })
         .then(response => {
-          this.user = UserParser.responseToUser(response, this.user);
+          this.user = response.data;
+          localStorage.setItem('user', JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
         });
     }
   },
-
-  // Fetch user data before rendering component
   beforeMount() {
-    this.getUserData();
+    this.user = JSON.parse(localStorage.getItem("user"));
   }
 };
 </script>

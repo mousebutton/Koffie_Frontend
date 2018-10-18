@@ -48,33 +48,22 @@ export default {
   },
 
   methods: {
-    getUserData() {
-      axios
-        .get(baseUrl + "/users/who", {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") }
-        })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-
     login() {
       axios
         .post(baseUrl + "/auth/login", this.user)
         .then(response => {
-          localStorage.setItem("token", response.data.accessToken);
-          this.isLoggedIn = true;
-          this.$router.push("/profile");
+          if (response.status === 200) {
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("token", response.data.accessToken);
+            this.$router.push("/profile");
+          }
         })
         .catch(error => {
           if (error.response.status === 401) {
             this.hasLoginError = true;
           }
         });
-    },
+    }
   }
 };
 </script>
