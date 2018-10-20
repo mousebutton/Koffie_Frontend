@@ -1,11 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import Login from '@/components/Login'
-import Register from '@/components/Register'
-import UserPage from '@/components/UserPage'
-import Admin from '@/components/Admin'
-import Unauthorized from '@/components/Unauthorized'
+
 
 Vue.use(Router)
 
@@ -15,27 +10,32 @@ let router = new Router({
         {
             path: '/',
             name: 'Home',
-            component: Home
+            component: () => import('@/components/Home'),
         },
         {
             path: '/login',
             name: 'Login',
-            component: Login
+            component: () => import('@/components/Login'),
         },
         {
             path: '/register',
             name: 'Register',
-            component: Register
+            component: () => import('@/components/Register'),
+        },
+        {
+            path: '/app',
+            name: 'Canvas',
+            component: () => import('@/canvas/Canvas'),
         },
         {
             path: '/unauthorized',
             name: 'Unauthorized',
-            component: Unauthorized
+            component: () => import('@/components/Unauthorized'),
         },
         {
             path: '/profile',
             name: 'UserPage',
-            component: UserPage,
+            component: () => import('@/components/UserPage'),
             meta: {
                 requiresAuth: true
             }
@@ -43,7 +43,7 @@ let router = new Router({
         {
             path: '/admin',
             name: 'AdminPage',
-            component: Admin,
+            component: () => import('@/components/AdminDashboard/Admin'),
             meta: {
                 requiresAuth: true,
                 isAdmin: true

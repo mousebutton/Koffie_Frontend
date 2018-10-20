@@ -1,14 +1,14 @@
 <template>
 <div id="home">
-  <b-img src="https://benishop.co/imgcdn/1024/http/www.conceptdraw.com/solution-park/resource/images/solutions/office-layout-plans/Building-Plans-Office-Layout-Plan-Office-plan.png_.jpg"/>
+ 
 
 <!--Test if the websocket is working-->
-<!-- <input v-model="send_message" placeholder="Send Message">
+<input v-model="send_message" placeholder="Send Message">
       <button @click="send">Send</button>
    <h2>Messages Received</h2>
     <p v-for="message in received_messages">{{message}}</p> 
        <h2>Notifications Received</h2>
-    <p v-for="notification in received_notifications">{{notification}}</p>  -->
+    <p v-for="notification in received_notifications">{{notification}}</p> 
 </div>
 </template>
 

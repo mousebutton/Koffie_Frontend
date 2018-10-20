@@ -1,35 +1,33 @@
 <template>
   <div id="app"> 
-    <Navigation></Navigation>
- <div id="test">
-    <router-view></router-view>
- </div>
+    <Navigation id="navbar"></Navigation>
+    <router-view id="container"></router-view>
   </div>
 </template>
 
 <script>
-import Navigation from './components/Navigation'
+import Navigation from "./components/Navigation";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    'Navigation': Navigation
+    Navigation: Navigation
   }
-}
+};
 </script>
 
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 
-#test{
 
-  margin-top: 100px;
+#container {
+  margin-top: 80px;
 }
 </style>
