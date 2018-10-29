@@ -10,10 +10,10 @@
         </div> 
        <ul class="list-unstyled components">
             <li>
-                <a href="#"><i class="fas fa-users"></i> Users</a>
+                <a @click="renderAdminUserComponent"><i class="fas fa-users"></i> Users</a>
             </li>
             <li>
-                <a href="#"><i class="fas fa-building"></i> Departments</a>
+                <a @click="renderAdminDepartmentComponent"><i class="fas fa-building"></i> Departments</a>
             </li>
             <li>
                 <a href="#"><i class="fas fa-coffee"></i> Coffee</a>
@@ -22,7 +22,7 @@
     </nav>
 
     <div id="content">
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
 
             <button type="button" id="sidebarCollapse" class="btn btn-info" @click="hideSidebar">
@@ -32,12 +32,16 @@
 
         </div>
     </nav>
-    </div>
 
+    <!--this router view will render the child components of the admin dashboard-->
+    <router-view></router-view>
+
+    </div>
   </div>
 </template> 
 
 <script>
+
 export default {
   name: "Admin",
   components: {
@@ -53,6 +57,14 @@ export default {
   methods : {
     hideSidebar(){
       document.getElementById('sidebar').classList.toggle('active');
+    },
+
+    renderAdminUserComponent() {
+        this.$router.push("/users");
+    },
+
+    renderAdminDepartmentComponent () {
+        this.$router.push('/departments')
     }
   },
 
@@ -60,6 +72,7 @@ export default {
    this.admin = JSON.parse(localStorage.getItem("user"));
   }
 };
+
 </script>
 
 
@@ -98,8 +111,8 @@ a, a:hover, a:focus {
 }
 
 #sidebar {
-    min-width: 25vh;
-    max-width: 25vh;
+    min-width: 250px;
+    max-width: 250px;
     min-height: 100vh;
     background: #264653;
     color: #fff;
@@ -136,8 +149,8 @@ a, a:hover, a:focus {
 
 #content{
   min-height: 100vh;
-  min-width: 75vw;
-  max-width: 75vw;
+  min-width: 85vw;
+  max-width: 100vw;
 }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {

@@ -47,7 +47,19 @@ let router = new Router({
             meta: {
                 requiresAuth: true,
                 isAdmin: true
-            }
+            },
+            children: [
+                {
+                    path: '/users',
+                    name: 'Users',
+                    component: () => import('@/components/Login')
+                },
+                {
+                    path: '/departments',
+                    name: 'Departments',
+                    component: () => import('@/components/AdminDashboard/Departments')
+                }
+            ]
         }
     ]
 })

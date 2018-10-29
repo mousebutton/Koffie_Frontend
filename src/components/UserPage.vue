@@ -115,7 +115,11 @@ export default {
 
     uploadAvatar() {
       axios
-        .post(baseUrl + "/users/avatar", this.user)
+        .post(baseUrl + "/users/avatar", this.user, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
         .then(response => {
           localStorage.setItem('user', JSON.stringify(response.data));
         })
