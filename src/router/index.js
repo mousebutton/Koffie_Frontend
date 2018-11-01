@@ -23,9 +23,9 @@ let router = new Router({
             component: () => import('@/components/Register'),
         },
         {
-            path: '/app',
+            path: '/canvas',
             name: 'Canvas',
-            component: () => import('@/canvas/Canvas'),
+            component: () => import('@/components/Canvas'),
         },
         {
             path: '/unauthorized',

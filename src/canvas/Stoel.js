@@ -1,12 +1,20 @@
-import { fabric } from 'fabric'
+import {fabric} from 'fabric'
 
-export default class Stoel{
+export default class Stoel {
 
-  constructor(canvas, imgLocation) {
-    fabric.Image.fromURL(imgLocation, function(img) {
-      img.left = 100;
-      img.top = 100;
+  constructor(canvas, imgLocation, left, top, rotation) {
+    fabric.Image.fromURL(imgLocation, img => {
+      img.left = left;
+      img.top = top;
+      img.centeredRotation = true;
+      img.selectable = false;
+      img.originX = "center";
+      img.originY = "center";
+
       canvas.add(img);
+
+      img.angle = rotation;
+      // canvas.renderAll();
     });
   }
 }
