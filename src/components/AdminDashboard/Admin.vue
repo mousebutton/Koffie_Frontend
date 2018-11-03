@@ -84,7 +84,6 @@ export default {
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
-    
 }
 
 p {
@@ -98,10 +97,8 @@ p {
 a, a:hover, a:focus {
     color: inherit;
     text-decoration: none;
-    transition: all 0.3s;
-    
+    transition: all 0.3s;  
 }
-
 
 .wrapper {
     font-family: 'Poppins', sans-serif;
@@ -157,6 +154,7 @@ a, a:hover, a:focus {
     color: #fff;
     background: #264653;
 }
+
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
