@@ -52,7 +52,7 @@ let router = new Router({
                 {
                     path: '/users',
                     name: 'Users',
-                    component: () => import('@/components/Login')
+                    component: () => import('@/components/AdminDashboard/Users')
                 },
                 {
                     path: '/departments',
