@@ -55,7 +55,7 @@ export default {
           if (response.status === 200) {
             localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("token", response.data.accessToken);
-            this.$router.push("/profile");
+            this.$router.push("/canvas");
           }
         })
         .catch(error => {
@@ -63,6 +63,14 @@ export default {
             this.hasLoginError = true;
           }
         });
+    },
+
+    userIsAdmin(roles) {
+      for (var i = 0; i < roles.length; i++) {
+        if (roles[i].role === "ADMIN") {
+            localStorage.setItem('isAdmin', true);
+        }
+      }
     }
   }
 };

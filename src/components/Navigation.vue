@@ -9,6 +9,7 @@
       <b-nav-item-dropdown right>
         <template slot="button-content"> <img src="/static/user-icon.png"/></template>
         <b-dropdown-item @click="goto">Profile</b-dropdown-item>
+         <b-dropdown-item @click="goToAdminDashboard">Admin</b-dropdown-item>
         <b-dropdown-item @click="logout">Logout</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
@@ -31,7 +32,7 @@ export default {
     return {
       dismissSecs: 3,
       dismissCountDown: 0,
-      showDismissibleAlert: false,
+      showDismissibleAlert: false
     };
   },
 
@@ -49,6 +50,10 @@ export default {
         : this.$router.push("/profile");
     },
 
+    goToAdminDashboard() {
+      this.$router.push("/admin");
+    },
+
     countDownChanged(dismissCountDown) {
       this.dismissCountDown = dismissCountDown;
     },
@@ -60,9 +65,8 @@ export default {
 </script>
 
 <style>
- 
-#navbar{
-  background-color:#2aa68b;
+#navbar {
+  background-color: #2aa68b;
   font-size: 20px;
 }
 
@@ -79,7 +83,7 @@ export default {
   z-index: 9999;
   border-radius: 0px;
   background-color: #2aa68b;
-  color:white;
+  color: white;
   font-size: 20px;
 }
 

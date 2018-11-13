@@ -16,7 +16,10 @@
                 <a @click="renderAdminDepartmentComponent"><i class="fas fa-building"></i> Departments</a>
             </li>
             <li>
-                <a href="#"><i class="fas fa-coffee"></i> Coffee</a>
+                <a @click="renderCoffeeComponent"><i class="fas fa-coffee"></i> Drinks</a>
+            </li>
+             <li>
+                <a @click="renderCanvasComponent"><i class="fas fa-edit"></i> Canvas</a>
             </li>
         </ul>
     </nav>
@@ -27,7 +30,7 @@
 
             <button type="button" id="sidebarCollapse" class="btn btn-info" @click="hideSidebar">
                 <i class="fas fa-align-left"></i>
-                <span>Toggle Sidebar</span>
+                <span>Sidebar</span>
             </button>
 
         </div>
@@ -65,7 +68,14 @@ export default {
 
     renderAdminDepartmentComponent () {
         this.$router.push('/departments')
-    }
+    },
+
+    renderCoffeeComponent () {
+        this.$router.push('/coffee')
+    },
+    renderCanvasComponent () {
+    this.$router.push('/canvas/edit')
+    } 
   },
 
   beforeMount() {

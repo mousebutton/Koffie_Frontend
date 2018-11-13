@@ -23,6 +23,13 @@
                           </div>
 
                           <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Afdeling</label>
+                              <div class="col-sm-10">
+                                <input type="email"  readonly class="form-control" v-model="user.department">
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Firstname</label>
                               <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="user.firstName">
@@ -33,13 +40,6 @@
                             <label class="col-sm-2 col-form-label">Lastname</label>
                               <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="user.lastName">
-                              </div>
-                          </div>
-
-                          <div class="form-group row"  v-for="department in user.departments">
-                            <label class="col-sm-2 col-form-label">Afdeling</label>
-                              <div class="col-sm-10">
-                                <input type="text" disabled class="form-control" v-model="department.name">
                               </div>
                           </div>
                           
@@ -68,29 +68,34 @@ export default {
 
   name: "UserPage",
 
-
   data() {
     return {
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        shortName: "",
-        avatar: "",
-        roles: [{ role: "" }],
-        departments: [{ name: "" }]
-      },
-
-      errorMsg: null,
-
+      user: {},
+      errorMsg: null
     };
   },
 
   methods: {
     openFileInput() {
       document.getElementById("imgupload").click();
+    },
+
+    fetchUserData() {
+      console.log(this.user);
+      axios
+        .get(baseUrl + "/users/who", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(response => {
+          this.user = response.data;
+          console.log(this.user);
+          localStorage.setItem("user", JSON.stringify(response.data));
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     onFileSelected(event) {
@@ -100,7 +105,6 @@ export default {
       var reader = new FileReader();
 
       if (file.size < maxAvatarByteSize) {
-        
         reader.readAsDataURL(file);
 
         reader.onload = event => {
@@ -121,7 +125,7 @@ export default {
           }
         })
         .then(response => {
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
@@ -129,6 +133,7 @@ export default {
     },
 
     updateUser() {
+
       axios
         .put(baseUrl + "/users/user", this.user, {
           headers: {
@@ -137,7 +142,7 @@ export default {
         })
         .then(response => {
           this.user = response.data;
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
@@ -145,7 +150,7 @@ export default {
     }
   },
   beforeMount() {
-    this.user = JSON.parse(localStorage.getItem("user"));
+    this.fetchUserData();
   }
 };
 </script>

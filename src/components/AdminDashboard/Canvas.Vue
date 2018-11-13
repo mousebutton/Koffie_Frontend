@@ -1,20 +1,26 @@
 <template>
-<div id="home">
+<div>
+  <h4>Canvas Editor</h4>
 </div>
 </template>
 
 <script>
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-
 const baseUrl = "http://localhost:8080/api";
 
 export default {
-  name: "Home",
+  name: "CanvasEditor",
 
+  data() {
+    return {
+    };
+  },
 
+  methods: {
+    
+  }
 };
 </script>
 
 <style>
+
 </style>
