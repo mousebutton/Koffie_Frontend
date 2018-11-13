@@ -139,21 +139,20 @@ export default {
   },
 
   mounted() {
-    this.connectWebsocket();
+    // this.connectWebsocket();
     this.user = JSON.parse(localStorage.getItem("user"));
-    if (this.user.department === "") {
-      this.noDepartmentMsg =
-        "You are not in a department yet, please contact an admin";
-    } else {
-      this.getCanvasForUser();
-    }
-
-    // this.canvas.addImage("/static/stoel.png", 200, 200, 0);
-    // this.canvas.addImage("/static/stoel.png", 200, 260, 0);
-    // this.canvas.addImage("/static/stoel.png", 360, 200, 180);
-    // this.canvas.addImage("/static/stoel.png", 360, 260, 180);
-    // this.canvas.addImage("/static/stoel.png", 300, 100, 180);
-    // this.canvas.addImage("/static/stoel.png", 400, 200, 270);
+    this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+    // if (this.user.department === "") {
+    //   this.noDepartmentMsg =
+    //     "You are not in a department yet, please contact an admin";
+    // } else {
+    //   this.getCanvasForUser();
+    // }
+    let chairsForCanvas = [];
+    let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
+    this.canvas = new Canvas("c", chairsForCanvas, coffeeMachine, this);
+    this.canvas.addChair("/static/stoel.png", 200, 200, 0);
+    this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
   }
 };
 </script>

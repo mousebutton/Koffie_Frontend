@@ -24,9 +24,9 @@ export default class Canvas {
     let target = e.target;
     if (target && target.type === "image" && target.height <= 300) {
       this.getObjectOnClick(e.target.left, e.target.top);
-      // let posLeft = target.left + target.width + 5;
-      // let posRight = target.top - 20;   
-      // this.canvas.add(this.addRectToChair(posLeft, posRight));
+      let posLeft = target.left + target.width + 5;
+      let posRight = target.top - 20;
+      this.canvas.add(this.addRectToChair(posLeft, posRight));
     } else if (target.type === "rect") {
       this.canvas.remove(target);
     }
@@ -69,21 +69,19 @@ export default class Canvas {
   }
 
 
-  // addRectToChair = (left, top) => {
-  //   return new fabric.Rect({
-  //     width: 180, height: 100,
-  //     fill: "#bfad0f",
-  //     stroke: "black",
-  //     strokeWidth: 1,
+  addRectToChair = (left, top) => {
+    return new fabric.Rect({
+      width: 180, height: 100,
+      fill: "#bfad0f",
+      stroke: "black",
+      strokeWidth: 1,
 
-  //     left: left,
-  //     top: top,
-  //     selectable: true,
-  //     centeredRotation: true
-  //   });
-
-
-  // };
+      left: left,
+      top: top,
+      selectable: true,
+      centeredRotation: true
+    });
+  };
 
   addChair(imgLocation, left, top, rotation, user) {
     new Stoel(this.canvas, imgLocation, left, top, rotation, user);
