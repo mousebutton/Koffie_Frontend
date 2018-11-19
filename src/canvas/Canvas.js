@@ -1,7 +1,6 @@
 import {fabric} from 'fabric'
-import Stoel from './Stoel'
+import Persoon from './Persoon'
 import CoffeeMachine from './CoffeeMachine'
-import PersoonDialog from "./PersoonDialog";
 
 export default class Canvas {
 
@@ -9,29 +8,30 @@ export default class Canvas {
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
 
-    this.initCanvas();
-
-
+    this.initCanvas(chairsForCanvas, coffeeMachine);
   }
-  initCanvas() {
+
+  initCanvas(ch,c) {
     this.canvas.setWidth(1050);
     this.canvas.setHeight(window.innerHeight);
     this.canvas.selection = false;
     this.canvas.hoverCursor = "pointer";
     this.canvas.centeredRotation = true;
 
-    this.chairsForCanvas = chairsForCanvas;
-    this.coffeeMachine = coffeeMachine;
+    this.chairsForCanvas = ch;
+    this.coffeeMachine = c;
 
     this.addBackground();
   }
+
   addStage() {
-    this.canvas.addChair("/static/stoel.png", 200, 200, 0);
+    this.addChair("/static/stoel.png", 200, 200, 0);
   }
 
   addChairs(chairs) {
 
   }
+
   getObjectOnClick(left, top) {
     // Get CoffeeMachine
     if (this.coffeeMachine.leftPos === left && this.coffeeMachine.topPos === top) {
@@ -85,7 +85,7 @@ export default class Canvas {
   };
 
   addChair(imgLocation, left, top, rotation, user) {
-    new Stoel(this.canvas, imgLocation, left, top, rotation, user);
+    new Persoon(this.canvas, imgLocation, left, top, rotation, user);
   };
 
   addCoffeeMachine(imgLocation, left, top) {

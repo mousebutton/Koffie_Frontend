@@ -1,7 +1,7 @@
 import {fabric} from 'fabric'
 import PersoonDialog from "./PersoonDialog"
 
-export default class Stoel {
+export default class Persoon {
 
   constructor(canvas, imgLocation, left, top, rotation, user) {
     // Add chair to canvas
@@ -14,13 +14,14 @@ export default class Stoel {
       img.selectable = false;
       img.originX = "center";
       img.originY = "center";
-      canvas.add(img);
       img.angle = rotation;
       img.objectType = "persoon";
 
       img.on("mouseup", (e) => {
         this.persoonDialog.buildDialog(e.target.left, e.target.top);
       });
+
+      canvas.add(img);
       // canvas.renderAll();
     });
   }

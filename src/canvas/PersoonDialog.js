@@ -19,22 +19,25 @@ export default class PersoonDialog {
   buildDialog(left, top) {
     let containerWidth = 180;
     let containerHeight = 100;
+
     let dialogContainer = new fabric.Rect({
       width: containerWidth, height: containerHeight,
       fill: "#bfad0f",
       stroke: "black",
       strokeWidth: 1,
 
-      left: left,
-      top: top,
+      left: left + 30,
+      top: top - 25,
       selectable: false,
       centeredRotation: true,
       objectType: "dialog",
-      id: this.currentId
+      id: this.currentId,
+      rx: 5,
+      ry: 5
     });
 
-    let posRight = left + containerWidth - 25;
-    let posTop = top + 5;
+    let posRight = dialogContainer.left + containerWidth - 25;
+    let posTop = dialogContainer.top + 5;
 
     let closeButton = new fabric.Rect({
       width: 20, height: 20,
@@ -47,7 +50,9 @@ export default class PersoonDialog {
       selectable: false,
       centeredRotation: true,
       objectType: "dialogClose",
-      id: this.currentId
+      id: this.currentId,
+      rx: 5,
+      ry: 5
     });
 
     closeButton.on("mouseup", (e) => {
