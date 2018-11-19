@@ -10,7 +10,7 @@ export default class CoffeeMachine {
         img.selectable = false;
         img.originX = "center";
         img.originY = "center";
-  
+
         canvas.add(img);
   
         img.angle = rotation;

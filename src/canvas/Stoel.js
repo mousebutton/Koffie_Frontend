@@ -13,6 +13,7 @@ export default class Stoel {
       img.originY = "center";
       canvas.add(img);
       img.angle = rotation;
+      img.objectType = "persoon";
       // canvas.renderAll();
     });
   }

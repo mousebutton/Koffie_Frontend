@@ -1,12 +1,14 @@
-import { fabric } from 'fabric'
+import {fabric} from 'fabric'
 import Stoel from './Stoel'
 import CoffeeMachine from './CoffeeMachine'
+import PersoonDialog from "./PersoonDialog";
 
 export default class Canvas {
 
   constructor(canvasId, chairsForCanvas, coffeeMachine, orderModal) {
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
+
     this.canvas.setWidth(1050);
     this.canvas.setHeight(window.innerHeight);
     this.chairsForCanvas = chairsForCanvas;
@@ -19,16 +21,25 @@ export default class Canvas {
   }
 
   handleMouseDown = (e) => {
-    console.log(e);
-
+    // console.log(e);
+    let persoonDialog = new PersoonDialog(this.canvas);
     let target = e.target;
-    if (target && target.type === "image" && target.height <= 300) {
-      this.getObjectOnClick(e.target.left, e.target.top);
-      let posLeft = target.left + target.width + 5;
-      let posRight = target.top - 20;
-      this.canvas.add(this.addRectToChair(posLeft, posRight));
-    } else if (target.type === "rect") {
-      this.canvas.remove(target);
+
+    if (target && target.type === "image") {
+      switch (target.objectType) {
+        case "persoonInfo":
+          this.canvas.remove(target);
+          break;
+        case "coffeeMachine":
+          
+          break;
+        case "persoon":
+          let posLeft = target.left + target.width + 5;
+          let posTop = target.top - 20;
+          persoonDialog.buildDialog(posLeft,posTop);
+          break;
+        default:
+      }
     }
   };
 
@@ -36,7 +47,7 @@ export default class Canvas {
     // Get CoffeeMachine
     if (this.coffeeMachine.leftPos === left && this.coffeeMachine.topPos === top) {
       //Show coffee menu
-      this.orderModal.orderCoffee();
+      // this.orderModal.orderCoffee();
       return;
     }
     // Get chair object
@@ -79,7 +90,8 @@ export default class Canvas {
       left: left,
       top: top,
       selectable: true,
-      centeredRotation: true
+      centeredRotation: true,
+      objectType: "popup"
     });
   };
 

@@ -134,7 +134,7 @@ export default {
         this.canvas.addChair("/static/stoel.png", chair.leftPos, chair.topPos, chair.rotation, chair.user);
       }
       // Add coffee machine
-      this.canvas.addCoffeeMachine("/static/coffeemachine.png", this.coffeeMachine.leftPos, this.coffeeMachine.topPos, this.coffeeMachine.rotation, OrderCoffee);
+      // this.canvas.addCoffeeMachine("/static/coffeemachine.png", this.coffeeMachine.leftPos, this.coffeeMachine.topPos, this.coffeeMachine.rotation, OrderCoffee);
     }
   },
 
@@ -152,7 +152,7 @@ export default {
     let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
     this.canvas = new Canvas("c", chairsForCanvas, coffeeMachine, this);
     this.canvas.addChair("/static/stoel.png", 200, 200, 0);
-    this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
+    // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
   }
 };
 </script>
