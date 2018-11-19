@@ -15,7 +15,7 @@ export default class Canvas {
     this.canvas.setWidth(1050);
     this.canvas.setHeight(window.innerHeight);
     this.canvas.selection = false;
-    this.canvas.hoverCursor = "pointer";
+    this.canvas.hoverCursor = "default";
     this.canvas.centeredRotation = true;
 
     this.chairsForCanvas = ch;

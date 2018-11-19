@@ -44,7 +44,7 @@ export default class PersoonDialog {
       fill: "red",
       stroke: "red",
       strokeWidth: 1,
-
+      hoverCursor: "pointer",
       left: posRight,
       top: posTop,
       selectable: false,

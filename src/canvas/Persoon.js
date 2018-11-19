@@ -11,6 +11,7 @@ export default class Persoon {
       img.left = left;
       img.top = top;
       img.centeredRotation = true;
+      img.hoverCursor = "pointer";
       img.selectable = false;
       img.originX = "center";
       img.originY = "center";
