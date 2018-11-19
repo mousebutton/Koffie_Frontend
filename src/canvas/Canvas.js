@@ -9,40 +9,29 @@ export default class Canvas {
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
 
+    this.initCanvas();
+
+
+  }
+  initCanvas() {
     this.canvas.setWidth(1050);
     this.canvas.setHeight(window.innerHeight);
-    this.chairsForCanvas = chairsForCanvas;
-    this.coffeeMachine = coffeeMachine;
     this.canvas.selection = false;
     this.canvas.hoverCursor = "pointer";
     this.canvas.centeredRotation = true;
+
+    this.chairsForCanvas = chairsForCanvas;
+    this.coffeeMachine = coffeeMachine;
+
     this.addBackground();
-    this.canvas.on("mouse:down", this.handleMouseDown);
+  }
+  addStage() {
+    this.canvas.addChair("/static/stoel.png", 200, 200, 0);
   }
 
-  handleMouseDown = (e) => {
-    // console.log(e);
-    let persoonDialog = new PersoonDialog(this.canvas);
-    let target = e.target;
+  addChairs(chairs) {
 
-    if (target && target.type === "image") {
-      switch (target.objectType) {
-        case "persoonInfo":
-          this.canvas.remove(target);
-          break;
-        case "coffeeMachine":
-          
-          break;
-        case "persoon":
-          let posLeft = target.left + target.width + 5;
-          let posTop = target.top - 20;
-          persoonDialog.buildDialog(posLeft,posTop);
-          break;
-        default:
-      }
-    }
-  };
-
+  }
   getObjectOnClick(left, top) {
     // Get CoffeeMachine
     if (this.coffeeMachine.leftPos === left && this.coffeeMachine.topPos === top) {
