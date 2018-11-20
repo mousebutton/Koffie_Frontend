@@ -5,7 +5,7 @@ export default class PersoonDialog {
   constructor(canvas) {
     this.id = "";
     this.canvas = canvas;
-    this.currentId = 1;
+    this.currentId = Math.round(Math.random() * 1000000);
   }
 
   removeDialog(id) {
@@ -57,6 +57,7 @@ export default class PersoonDialog {
 
     closeButton.on("mouseup", (e) => {
       let id = e.target.id;
+      console.log("remove objects with id: " + id);
       this.canvas.getObjects().forEach((object) => {
         if (object.id == id) {
           this.canvas.remove(object);
@@ -67,7 +68,7 @@ export default class PersoonDialog {
 
     this.canvas.add(dialogContainer);
     this.canvas.add(closeButton);
-    this.currentId += 1;
+    // this.currentId += 1;
     //create rect (omhulsel)
     //create rect (close knop, kan ook image worden)
     //create images (de koffie knoppen)

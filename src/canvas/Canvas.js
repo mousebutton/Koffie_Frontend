@@ -11,7 +11,7 @@ export default class Canvas {
     this.initCanvas(chairsForCanvas, coffeeMachine);
   }
 
-  initCanvas(ch,c) {
+  initCanvas(ch, c) {
     this.canvas.setWidth(1050);
     this.canvas.setHeight(window.innerHeight);
     this.canvas.selection = false;
@@ -25,7 +25,9 @@ export default class Canvas {
   }
 
   addStage() {
-    this.addChair("/static/stoel.png", 200, 200, 0);
+    this.addChair(200, 200, 0);
+    this.addChair(400, 200, 0);
+    this.addCoffeeMachine(400, 100);
   }
 
   addChairs(chairs) {
@@ -84,12 +86,12 @@ export default class Canvas {
     });
   };
 
-  addChair(imgLocation, left, top, rotation, user) {
-    new Persoon(this.canvas, imgLocation, left, top, rotation, user);
+  addChair(left, top, rotation, user) {
+    new Persoon(this.canvas, "/static/stoel.png", left, top, rotation, user);
   };
 
-  addCoffeeMachine(imgLocation, left, top) {
-    new CoffeeMachine(this.canvas, imgLocation, left, top)
+  addCoffeeMachine(left, top) {
+    new CoffeeMachine(this.canvas, "/static/coffee_machine.png", left, top, 0, 50)
   }
 
 }
