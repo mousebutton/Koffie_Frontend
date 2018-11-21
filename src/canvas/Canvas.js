@@ -25,9 +25,10 @@ export default class Canvas {
   }
 
   addStage() {
-    this.addChair(200, 200, 0);
-    this.addChair(400, 200, 0);
+    this.addChair(220, 240, 0);
+    this.addChair(500, 240, 180);
     this.addCoffeeMachine(400, 100);
+    this.addTable(250,180, 0);
   }
 
   addChairs(chairs) {
@@ -70,7 +71,6 @@ export default class Canvas {
     });
   }
 
-
   addRectToChair = (left, top) => {
     return new fabric.Rect({
       width: 180, height: 100,
@@ -94,4 +94,15 @@ export default class Canvas {
     new CoffeeMachine(this.canvas, "/static/coffee_machine.png", left, top, 0, 50)
   }
 
+  addTable(left, top, rotation) {
+    fabric.Image.fromURL("/static/tafel.png", img => {
+      img.left = left;
+      img.top = top;
+
+      img.selectable = false;
+      img.hoverCursor = "default";
+
+      this.canvas.add(img);
+    });
+  }
 }

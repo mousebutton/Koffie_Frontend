@@ -42,11 +42,6 @@ export default class CoffeeMenu {
 
     this.canvas.add(dialogContainer);
     this.canvas.add(closeButton);
-    // this.canvas.add(americanoCoffee);
-    // this.currentId += 1;
-    //create rect (omhulsel)
-    //create rect (close knop, kan ook image worden)
-    //create images (de koffie knoppen)
   }
 
   buildContainer(containerWidth, containerHeight, left, top) {
