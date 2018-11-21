@@ -1,8 +1,11 @@
 import {fabric} from 'fabric'
+import CoffeeMenu from './CoffeeMenu'
 
 export default class CoffeeMachine {
 
   constructor(canvas, imgLocation, left, top, rotation, scale) {
+    this.coffeeMenu = new CoffeeMenu(canvas);
+
     fabric.Image.fromURL(imgLocation, img => {
       img.left = left;
       img.top = top;
@@ -20,7 +23,7 @@ export default class CoffeeMachine {
       // canvas.renderAll();
 
       img.on("mouseup", (e) => {
-
+        this.coffeeMenu.buildDialog(e.target.left, e.target.top);
       })
     });
   }

@@ -8,14 +8,6 @@ export default class PersoonDialog {
     this.currentId = Math.round(Math.random() * 1000000);
   }
 
-  removeDialog(id) {
-    this.canvas.getObjects().forEach((e) => {
-      if (e.id === 100) {
-        console.log(e)
-      }
-    });
-  }
-
   buildDialog(left, top) {
     let containerWidth = 180;
     let containerHeight = 100;
