@@ -2,27 +2,10 @@
   <div>
     <h2>{{departmentForCanvas.name}}</h2>
     <h2>{{noDepartmentMsg}}</h2>
-
-    <div class="row">
-      <div class="col-md-2">
-        <h2>Messages Received</h2>
-        <p v-for="message in received_messages">{{message}}</p>
-
-        <h2>Notifications Received</h2>
-        <p v-for="notification in received_notifications">{{notification}}</p>
-
-        <input v-model="send_message" placeholder="Send Message">
-        <button @click="sendMessage">Send</button>
-      </div>
-
       <div class="col-md-8">
         <canvas id="c"></canvas>
       </div>
-
       <order-coffee ref="OrderCoffee"></order-coffee>
-
-    </div>
-
   </div>
 </template>
 
@@ -152,7 +135,7 @@
       let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
       this.canvas = new Canvas("c", coffeeMachine, this);
       this.canvas.addStage();
-      this.canvas.addChairs(chairsForCanvas);
+      // this.canvas.addChairs(chairsForCanvas);
       // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
     }
   };

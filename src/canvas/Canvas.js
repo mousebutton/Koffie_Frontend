@@ -25,14 +25,11 @@ export default class Canvas {
   }
 
   addStage() {
-    this.addChair(220, 240, 0);
-    this.addChair(500, 240, 180);
+    this.addChair(220, 340, 0);
+    this.addChair(370, 240, 90);
+    this.addChair(500, 340, 180);
     this.addCoffeeMachine(400, 100);
-    this.addTable(250,180, 0);
-  }
-
-  addChairs(chairs) {
-
+    this.addTable(250, 280, 0);
   }
 
   getObjectOnClick(left, top) {
@@ -70,21 +67,6 @@ export default class Canvas {
       this.canvas.sendToBack(img);
     });
   }
-
-  addRectToChair = (left, top) => {
-    return new fabric.Rect({
-      width: 180, height: 100,
-      fill: "#bfad0f",
-      stroke: "black",
-      strokeWidth: 1,
-
-      left: left,
-      top: top,
-      selectable: true,
-      centeredRotation: true,
-      objectType: "popup"
-    });
-  };
 
   addChair(left, top, rotation, user) {
     new Persoon(this.canvas, "/static/stoel.png", left, top, rotation, user);

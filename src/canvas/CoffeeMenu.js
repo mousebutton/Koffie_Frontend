@@ -1,4 +1,5 @@
 import {fabric} from 'fabric'
+import axios from "axios";
 
 export default class CoffeeMenu {
 
@@ -25,9 +26,28 @@ export default class CoffeeMenu {
 
     let closeButton = this.buildCloseButton(posLeft, posTop);
 
-    this.addCoffeeType("americano", dialogContainer.left + 25, dialogContainer.top + 50);
-    this.addCoffeeType("cappucino", dialogContainer.left + 25, dialogContainer.top + 100);
-    this.addCoffeeType("cocao", dialogContainer.left + 75, dialogContainer.top + 50);
+    axios
+      .get("http://localhost:8080/api/admin/drinks/all")
+      .then((e) => {
+        let coffees = e.data;
+        let pos = [];
+        pos[0] = {left: dialogContainer.left + 25, top: dialogContainer.top + 50};
+        pos[1] = {left: dialogContainer.left + 25, top: dialogContainer.top + 100};
+        pos[2] = {left: dialogContainer.left + 75, top: dialogContainer.top + 50};
+        pos[3] = {left: dialogContainer.left + 75, top: dialogContainer.top + 100};
+        pos[4] = {left: dialogContainer.left + 125, top: dialogContainer.top + 50};
+
+        for (let i = 0; i < coffees.length; i++) {
+          let coffeeType = coffees[i].name;
+          let coffeeUrl = coffees[i].imageUrl;
+          this.addCoffeeType(coffeeType, coffeeUrl, pos[i].left, pos[i].top);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    // this.addCoffeeType("cocao", dialogContainer.left + 75, dialogContainer.top + 50);
 
     closeButton.on("mouseup", (e) => {
       let id = e.target.id;
@@ -80,9 +100,9 @@ export default class CoffeeMenu {
     });
   }
 
-  addCoffeeType(coffeeType, left, top) {
+  addCoffeeType(coffeeType, coffeeUrl, left, top) {
 
-    fabric.Image.fromURL(this.coffeeTypes[coffeeType], img => {
+    fabric.Image.fromURL(coffeeUrl, img => {
       img.left = left;
       img.top = top;
       img.centeredRotation = true;
