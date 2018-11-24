@@ -5,7 +5,7 @@
            <b-row>
                 <div v-for="drink in drinks" class="col-md-4">
                      <b-card id="coffeeCard">
-                        <img :src="drink.imageUrl">
+                        <img :src="drink.imageUrl" @click="orderDrink(drink)">
                         <h4 class="card-text">{{drink.name}}</h4>
                     </b-card>
                 </div>
@@ -24,6 +24,9 @@
 
 <script>
 import axios from "axios";
+import Canvas from "../canvas/Canvas";
+import WebsocketUtil from '../util/Websocket';
+
 const baseUrl = "http://localhost:8080/api/admin/drinks";
 
 export default {
@@ -34,6 +37,10 @@ export default {
       drinks: [],
       show: false
     };
+  },
+
+  components : {
+    'canvas' : Canvas
   },
 
   mounted() {
@@ -58,7 +65,12 @@ export default {
         })
         .catch(error => {
           console.log(error);
-        });
+        }); 
+    },
+
+    orderDrink(drink) {
+      this.toggleModal();
+      WebsocketUtil.sendMessage('Ordered ' + drink.name);
     }
   }
 };
@@ -68,6 +80,6 @@ export default {
 
 #coffeeCard:hover {
     background:lightgray;
-    
+    cursor: pointer;
 }
 </style>

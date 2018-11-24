@@ -4,15 +4,33 @@
     <h2>{{noDepartmentMsg}}</h2>
 
       <div class="row">
-       <div class="col-md-2">
-        <h2>Messages Received</h2>
-        <p v-for="message in received_messages">{{message}}</p> 
-        
-        <h2>Notifications Received</h2>
-        <p v-for="notification in received_notifications">{{notification}}</p> 
-
-        <input v-model="send_message" placeholder="Send Message">
-        <button @click="sendMessage">Send</button>
+          <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    <ul v-for="message in received_messages" class="chat">
+                        <li class="left clearfix"><span class="chat-img pull-left">
+                            <!-- <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" /> -->
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{message}}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
+                                </div>
+                            
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input id="btn-input" type="text" v-model="send_message" class="form-control input-sm" placeholder="Type your message here..." />
+                        <span class="input-group-btn">
+                            <button class="btn btn-info btn-sm" id="btn-chat" @click="sendMessage">
+                                Send</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
       </div>
 
         <div class="col-md-8">
@@ -22,8 +40,8 @@
           <order-coffee ref="OrderCoffee"></order-coffee>
 
     </div>
-    
   </div>
+  
 </template>
 
 <script>
@@ -32,6 +50,7 @@ import Stomp from "webstomp-client";
 import Canvas from "../canvas/Canvas";
 import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
+import WebsocketUtil from '../util/Websocket';
 
 const baseUrl = "http://localhost:8080/api";
 
@@ -65,45 +84,16 @@ export default {
         this.$refs.OrderCoffee.toggleModal();
     },
 
-    // Methods to register the websocket connection
-    connectWebsocket() {
-      this.socket = new SockJS("http://localhost:8080/websocket-endpoint");
-      this.stompClient = Stomp.over(this.socket);
-      this.stompClient.connect(
-        {},
-        frame => {
-          this.connected = true;
-          // Subscribe to the topics to receive messages from the server
-          this.stompClient.subscribe("/global-message/chat", msg => {
-            this.received_messages.push(msg.body);
-          }),
-            this.stompClient.subscribe("/global-message/user", msg => {
-              this.received_notifications.push(msg.body);
-            });
-        },
-        error => {
-          console.log(error);
-          this.connected = false;
-        }
-      );
-    },
+ connectWebsocket() {
+    WebsocketUtil.connectWebsocket();
+  },
 
-
-    disconnectWebsocket() {
-      if (this.stompClient) {
-        this.stompClient.disconnect();
-      }
-      this.connected = false;
-    },
+   disconnectWebsocket() {
+    WebsocketUtil.disconnectWebsocket();
+  },
 
     sendMessage() {
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send(
-          "/app-receive/chat-message",
-          this.send_message + "%" + localStorage.getItem("token"),
-          {}
-        );
-      }
+      WebsocketUtil.sendMessage(this.send_message);
     },
 
     // Get the canvas based on the department the user is in
@@ -120,6 +110,8 @@ export default {
           this.departmentForCanvas = response.data.department;
           this.canvas = new Canvas("c", this.chairsForCanvas, this.coffeeMachine, this);
           this.renderCanvas();
+
+          new Notification();
         })
         .catch(error => {
           console.log(error);
@@ -140,6 +132,7 @@ export default {
 
   mounted() {
     this.connectWebsocket();
+    this.received_messages = WebsocketUtil.getMessages();
     this.user = JSON.parse(localStorage.getItem("user"));
     if (this.user.department === "") {
       this.noDepartmentMsg =
@@ -159,4 +152,63 @@ export default {
 </script>
 
 <style scoped>
+.chat
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li
+{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 10px;
+}
+
+.chat li.right .chat-body
+{
+    margin-right: 400px;
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+    color: #777777;
+}
+
+.panel .slidedown .glyphicon, .chat .glyphicon
+{
+    margin-right: 5px;
+}
+
+.panel-body
+{
+    overflow-y: scroll;
+    height: 750px;
+}
+
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
 </style>
