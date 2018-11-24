@@ -2,44 +2,10 @@
   <div>
     <h2>{{departmentForCanvas.name}}</h2>
     <h2>{{noDepartmentMsg}}</h2>
-
-      <div class="row">
-          <div class="col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <ul v-for="message in received_messages" class="chat">
-                        <li class="left clearfix"><span class="chat-img pull-left">
-                            <!-- <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" /> -->
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">{{message}}</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>12 mins ago</small>
-                                </div>
-                            
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="panel-footer">
-                    <div class="input-group">
-                        <input id="btn-input" type="text" v-model="send_message" class="form-control input-sm" placeholder="Type your message here..." />
-                        <span class="input-group-btn">
-                            <button class="btn btn-info btn-sm" id="btn-chat" @click="sendMessage">
-                                Send</button>
-                        </span>
-                    </div>
-                </div>
-            </div>
+      <div class="col-md-8">
+        <canvas id="c"></canvas>
       </div>
-
-        <div class="col-md-8">
-          <canvas id="c"></canvas>
-        </div>
-
-          <order-coffee ref="OrderCoffee"></order-coffee>
-
-    </div>
+      <order-coffee ref="OrderCoffee"></order-coffee>
   </div>
   
 </template>
@@ -118,37 +84,73 @@ export default {
         });
     },
 
-    // Render the canvas based on the canvas JSON object
-    renderCanvas() {
-      // Add all the chairs
-      for (let i = 0; i < this.chairsForCanvas.length; i++) {
-        let chair = this.chairsForCanvas[i];
-        this.canvas.addChair("/static/stoel.png", chair.leftPos, chair.topPos, chair.rotation, chair.user);
+      disconnectWebsocket() {
+        if (this.stompClient) {
+          this.stompClient.disconnect();
+        }
+        this.connected = false;
+      },
+
+      sendMessage() {
+        if (this.stompClient && this.stompClient.connected) {
+          this.stompClient.send(
+            "/app-receive/chat-message",
+            this.send_message + "%" + localStorage.getItem("token"),
+            {}
+          );
+        }
+      },
+
+      // Get the canvas based on the department the user is in
+      getCanvasForUser() {
+        axios
+          .get(baseUrl + "/canvas/department/" + this.user.department, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token")
+            }
+          })
+          .then(response => {
+            this.chairsForCanvas = response.data.chairs;
+            this.coffeeMachine = response.data.coffeeMachine;
+            this.departmentForCanvas = response.data.department;
+            this.canvas = new Canvas("c", this.chairsForCanvas, this.coffeeMachine, this);
+            this.renderCanvas();
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
+
+      // Render the canvas based on the canvas JSON object
+      renderCanvas() {
+        // Add all the chairs
+        for (let i = 0; i < this.chairsForCanvas.length; i++) {
+          let chair = this.chairsForCanvas[i];
+          this.canvas.addChair("/static/stoel.png", chair.leftPos, chair.topPos, chair.rotation, chair.user);
+        }
+        // Add coffee machine
+        // this.canvas.addCoffeeMachine("/static/coffeemachine.png", this.coffeeMachine.leftPos, this.coffeeMachine.topPos, this.coffeeMachine.rotation, OrderCoffee);
       }
-      // Add coffee machine
-      this.canvas.addCoffeeMachine("/static/coffeemachine.png", this.coffeeMachine.leftPos, this.coffeeMachine.topPos, this.coffeeMachine.rotation, OrderCoffee);
-    }
-  },
+    },
 
-  mounted() {
-    this.connectWebsocket();
-    this.received_messages = WebsocketUtil.getMessages();
-    this.user = JSON.parse(localStorage.getItem("user"));
-    if (this.user.department === "") {
-      this.noDepartmentMsg =
-        "You are not in a department yet, please contact an admin";
-    } else {
-      this.getCanvasForUser();
+    mounted() {
+      // this.connectWebsocket();
+      this.user = JSON.parse(localStorage.getItem("user"));
+      this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+      // if (this.user.department === "") {
+      //   this.noDepartmentMsg =
+      //     "You are not in a department yet, please contact an admin";
+      // } else {
+      //   this.getCanvasForUser();
+      // }
+      let chairsForCanvas = [];
+      let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
+      this.canvas = new Canvas("c", coffeeMachine, this);
+      this.canvas.addStage();
+      // this.canvas.addChairs(chairsForCanvas);
+      // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
     }
-
-    // this.canvas.addImage("/static/stoel.png", 200, 200, 0);
-    // this.canvas.addImage("/static/stoel.png", 200, 260, 0);
-    // this.canvas.addImage("/static/stoel.png", 360, 200, 180);
-    // this.canvas.addImage("/static/stoel.png", 360, 260, 180);
-    // this.canvas.addImage("/static/stoel.png", 300, 100, 180);
-    // this.canvas.addImage("/static/stoel.png", 400, 200, 270);
-  }
-};
+  };
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
-import { fabric } from 'fabric'
-import Stoel from './Stoel'
+import {fabric} from 'fabric'
+import Persoon from './Persoon'
 import CoffeeMachine from './CoffeeMachine'
 
 export default class Canvas {
@@ -7,36 +7,36 @@ export default class Canvas {
   constructor(canvasId, chairsForCanvas, coffeeMachine, orderModal) {
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
-    this.canvas.setWidth(1050);
-    this.canvas.setHeight(window.innerHeight);
-    this.chairsForCanvas = chairsForCanvas;
-    this.coffeeMachine = coffeeMachine;
-    this.canvas.selection = false;
-    this.canvas.hoverCursor = "pointer";
-    this.canvas.centeredRotation = true;
-    this.addBackground();
-    this.canvas.on("mouse:down", this.handleMouseDown);
+
+    this.initCanvas(chairsForCanvas, coffeeMachine);
   }
 
-  handleMouseDown = (e) => {
-    console.log(e);
+  initCanvas(ch, c) {
+    this.canvas.setWidth(1050);
+    this.canvas.setHeight(window.innerHeight);
+    this.canvas.selection = false;
+    this.canvas.hoverCursor = "default";
+    this.canvas.centeredRotation = true;
 
-    let target = e.target;
-    if (target && target.type === "image" && target.height <= 300) {
-      this.getObjectOnClick(e.target.left, e.target.top);
-      // let posLeft = target.left + target.width + 5;
-      // let posRight = target.top - 20;   
-      // this.canvas.add(this.addRectToChair(posLeft, posRight));
-    } else if (target.type === "rect") {
-      this.canvas.remove(target);
-    }
-  };
+    this.chairsForCanvas = ch;
+    this.coffeeMachine = c;
+
+    this.addBackground();
+  }
+
+  addStage() {
+    this.addChair(220, 340, 0);
+    this.addChair(370, 240, 90);
+    this.addChair(500, 340, 180);
+    this.addCoffeeMachine(400, 100);
+    this.addTable(250, 280, 0);
+  }
 
   getObjectOnClick(left, top) {
     // Get CoffeeMachine
     if (this.coffeeMachine.leftPos === left && this.coffeeMachine.topPos === top) {
       //Show coffee menu
-      this.orderModal.orderCoffee();
+      // this.orderModal.orderCoffee();
       return;
     }
     // Get chair object
@@ -68,29 +68,23 @@ export default class Canvas {
     });
   }
 
-
-  // addRectToChair = (left, top) => {
-  //   return new fabric.Rect({
-  //     width: 180, height: 100,
-  //     fill: "#bfad0f",
-  //     stroke: "black",
-  //     strokeWidth: 1,
-
-  //     left: left,
-  //     top: top,
-  //     selectable: true,
-  //     centeredRotation: true
-  //   });
-
-
-  // };
-
-  addChair(imgLocation, left, top, rotation, user) {
-    new Stoel(this.canvas, imgLocation, left, top, rotation, user);
+  addChair(left, top, rotation, user) {
+    new Persoon(this.canvas, "/static/stoel.png", left, top, rotation, user);
   };
 
-  addCoffeeMachine(imgLocation, left, top) {
-    new CoffeeMachine(this.canvas, imgLocation, left, top)
+  addCoffeeMachine(left, top) {
+    new CoffeeMachine(this.canvas, "/static/coffee_machine.png", left, top, 0, 50)
   }
 
+  addTable(left, top, rotation) {
+    fabric.Image.fromURL("/static/tafel.png", img => {
+      img.left = left;
+      img.top = top;
+
+      img.selectable = false;
+      img.hoverCursor = "default";
+
+      this.canvas.add(img);
+    });
+  }
 }
