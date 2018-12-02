@@ -5,23 +5,23 @@ import Stomp from "webstomp-client";
 let messages = [];
 let notifications = [];
 
-export default class WebsocketUtil{
+export default new class WebsocketUtil {
 
-    static getMessages(){
-        return messages;
-    };
+  getMessages() {
+    return messages;
+  };
 
-    static getNotifications(){
-      return notifications;
-    };
- 
-     // Methods to register the websocket connection
- static connectWebsocket() {
+  getNotifications() {
+    return notifications;
+  };
+
+  // Methods to register the websocket connection
+  connectWebsocket() {
     this.socket = new SockJS("http://localhost:8080/websocket-endpoint");
     this.stompClient = Stomp.over(this.socket);
     this.stompClient.connect(
       {},
-      frame => {
+      connectEvent => {
         this.connected = true;
         // Subscribe to the topics to receive messages from the server
         this.stompClient.subscribe("/global-message/chat", msg => {
@@ -38,16 +38,15 @@ export default class WebsocketUtil{
     );
   };
 
-
-  static disconnectWebsocket() {
+  disconnectWebsocket() {
     if (this.stompClient) {
       this.stompClient.disconnect();
     }
     this.connected = false;
   };
 
-  static sendMessage(message) {
-      console.log(message);
+  sendMessage(message) {
+    console.log(message);
     if (this.stompClient && this.stompClient.connected) {
       this.stompClient.send(
         "/app-receive/chat-message",
