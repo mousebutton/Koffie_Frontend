@@ -122,7 +122,15 @@ export default class CoffeeMenu {
       img.id = this.currentId;
 
       img.on("mouseup", (e) => {
-        alert("je wilt deze coffee: " + e.target.coffeeType);
+        axios
+          .post("http://localhost:8080/api/users/makeorder", {
+            "coffee": "Latte 2",
+            "milk": false,
+            "sugar": true
+          })
+          .then((e) => {
+            alert(e.data);
+          });
       });
 
       this.canvas.add(img);
