@@ -5,6 +5,7 @@ import CoffeeMachine from './CoffeeMachine'
 export default class Canvas {
 
   constructor(canvasId, chairsForCanvas, coffeeMachine, orderModal) {
+    console.log(chairsForCanvas);
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
 
@@ -22,38 +23,24 @@ export default class Canvas {
     this.coffeeMachine = c;
 
     this.addBackground();
+    this.addStage(ch);
   }
 
-  addStage() {
-    this.addChair(220, 340, 0);
-    this.addChair(370, 240, 90);
-    this.addChair(500, 340, 180);
+  addStage(ch) {
+
+    // dynamic
+    for (let i = 0; i < ch.length; i++) {
+      let chair = ch[i];
+      this.addChair(chair);
+    }
+    // static
+    // this.addChair(220, 340, 0);
+    // this.addChair(370, 240, 90);
+    // this.addChair(500, 340, 180);
+
     this.addCoffeeMachine(400, 100);
     this.addTable(250, 280, 0);
   }
-
-  getObjectOnClick(left, top) {
-    // Get CoffeeMachine
-    if (this.coffeeMachine.leftPos === left && this.coffeeMachine.topPos === top) {
-      //Show coffee menu
-      // this.orderModal.orderCoffee();
-      return;
-    }
-    // Get chair object
-    for (var i = 0; i < this.chairsForCanvas.length; i++) {
-      let chair = this.chairsForCanvas[i];
-      if (chair.leftPos === left && chair.topPos === top) {
-        if (chair.user === null) {
-          alert('This chair is free');
-          break;
-        }
-        else {
-          alert(chair.user.email);
-          break;
-        }
-      }
-    }
-  };
 
   addBackground() {
     fabric.Image.fromURL("/static/background.png", img => {
@@ -68,9 +55,15 @@ export default class Canvas {
     });
   }
 
-  addChair(left, top, rotation, user) {
-    new Persoon(this.canvas, "/static/stoel.png", left, top, rotation, user);
+  // dynamic
+  addChair(chair) {
+    new Persoon(this.canvas, chair);
   };
+
+  // static 
+  // addChair(left, top, rotation, user) {
+  //   new Persoon(this.canvas, "/static/stoel.png", left, top, rotation, user);
+  // };
 
   addCoffeeMachine(left, top) {
     new CoffeeMachine(this.canvas, "/static/coffee_machine.png", left, top, 0, 50)

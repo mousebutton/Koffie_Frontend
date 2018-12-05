@@ -44,6 +44,7 @@
 import axios from "axios";
 import Drink from '@/models/Drink'
 
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api/admin/drinks";
 
 export default {
@@ -66,11 +67,7 @@ export default {
   methods: {
     getAllDrinks(){
       axios
-        .get(baseUrl + "/all", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          },
-        })
+        .get(baseUrl + "/all")
         .then(response => {
           console.log(response.data);
           this.drinks = response.data;
@@ -82,11 +79,7 @@ export default {
 
     saveDrink(){
       axios
-        .post(baseUrl + "/add", new Drink(this.drink), {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          },
-        })
+        .post(baseUrl + "/add", new Drink(this.drink))
         .then(response => {
         })
         .catch(error => {

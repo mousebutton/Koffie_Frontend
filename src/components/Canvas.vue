@@ -18,6 +18,8 @@ import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
 import WebsocketUtil from '../util/Websocket';
 
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
+
 const baseUrl = "http://localhost:8080/api";
 
 export default {
@@ -62,91 +64,38 @@ export default {
       WebsocketUtil.sendMessage(this.send_message);
     },
 
-    // Get the canvas based on the department the user is in
-    getCanvasForUser() {
-      axios
-        .get(baseUrl + "/canvas/department/" + this.user.department, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
-        .then(response => {
-          this.chairsForCanvas = response.data.chairs;
-          this.coffeeMachine = response.data.coffeeMachine;
-          this.departmentForCanvas = response.data.department;
-          this.canvas = new Canvas("c", this.chairsForCanvas, this.coffeeMachine, this);
-          this.renderCanvas();
-
-          new Notification();
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-
-      disconnectWebsocket() {
-        if (this.stompClient) {
-          this.stompClient.disconnect();
-        }
-        this.connected = false;
-      },
-
-      sendMessage() {
-        if (this.stompClient && this.stompClient.connected) {
-          this.stompClient.send(
-            "/app-receive/chat-message",
-            this.send_message + "%" + localStorage.getItem("token"),
-            {}
-          );
-        }
-      },
 
       // Get the canvas based on the department the user is in
       getCanvasForUser() {
         axios
-          .get(baseUrl + "/canvas/department/" + this.user.department, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
+          .get(baseUrl + "/canvas/department/" + this.user.department)
           .then(response => {
             this.chairsForCanvas = response.data.chairs;
             this.coffeeMachine = response.data.coffeeMachine;
-            this.departmentForCanvas = response.data.department;
             this.canvas = new Canvas("c", this.chairsForCanvas, this.coffeeMachine, this);
-            this.renderCanvas();
+            this.canvas.addStage();
           })
           .catch(error => {
             console.log(error);
           });
-      },
+          },
 
-      // Render the canvas based on the canvas JSON object
-      renderCanvas() {
-        // Add all the chairs
-        for (let i = 0; i < this.chairsForCanvas.length; i++) {
-          let chair = this.chairsForCanvas[i];
-          this.canvas.addChair("/static/stoel.png", chair.leftPos, chair.topPos, chair.rotation, chair.user);
-        }
-        // Add coffee machine
-        // this.canvas.addCoffeeMachine("/static/coffeemachine.png", this.coffeeMachine.leftPos, this.coffeeMachine.topPos, this.coffeeMachine.rotation, OrderCoffee);
-      }
     },
 
     mounted() {
       // this.connectWebsocket();
       this.user = JSON.parse(localStorage.getItem("user"));
-      this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
-      // if (this.user.department === "") {
-      //   this.noDepartmentMsg =
-      //     "You are not in a department yet, please contact an admin";
-      // } else {
-      //   this.getCanvasForUser();
-      // }
-      let chairsForCanvas = [];
-      let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
-      this.canvas = new Canvas("c", coffeeMachine, this);
-      this.canvas.addStage();
+      // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+    
+      if (this.user.department === "") {
+        this.noDepartmentMsg =
+          "You are not in a department yet, please contact an admin";
+      } else {
+        this.getCanvasForUser();
+      }
+      
+      // let chairsForCanvas = [];
+      // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
       // this.canvas.addChairs(chairsForCanvas);
       // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
     }

@@ -27,7 +27,11 @@ export default class CoffeeMenu {
     let closeButton = this.buildCloseButton(posLeft, posTop);
 
     axios
-      .get("http://localhost:8080/api/admin/drinks/all")
+      .get("http://localhost:8080/api/admin/drinks/all", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token")
+        }
+      })
       .then((e) => {
         let coffees = e.data;
         let pos = [];

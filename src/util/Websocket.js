@@ -47,7 +47,6 @@ export default class WebsocketUtil{
   };
 
   static sendMessage(message) {
-      console.log(message);
     if (this.stompClient && this.stompClient.connected) {
       this.stompClient.send(
         "/app-receive/chat-message",

@@ -57,6 +57,8 @@
 
 <script>
 import axios from "axios";
+
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api";
 
 export default {
@@ -73,18 +75,11 @@ export default {
   },
 
   methods: {
-    test(user) {
-      console.log(user);
-    },
 
     // Get all departments
     getAllDepartments() {
       axios
-        .get(baseUrl + "/admin/departments/all", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .get(baseUrl + "/admin/departments/all")
         .then(response => {
           this.departments = response.data;
         })
@@ -96,11 +91,7 @@ export default {
     // Get all users, needed to autocomplete when adding new users to a department
     getAllUsers() {
       axios
-        .get(baseUrl + "/admin/departments/users", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .get(baseUrl + "/admin/departments/users")
         .then(response => {
           this.allUsers = response.data;
         })
@@ -116,11 +107,7 @@ export default {
       params.append('departmentName', departmentName.value);
 
         axios
-        .post(baseUrl + "/admin/departments/add", params, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          },
-        })
+        .post(baseUrl + "/admin/departments/add", params)
         .then(response => {
           this.departments.push(response.data);
           departmentName.value = '';
@@ -140,15 +127,15 @@ export default {
         );
       } else {
         axios
-          .delete(baseUrl + "/admin/departments/delete/" + department.id, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
+          .delete(baseUrl + "/admin/departments/delete/" + department.id)
           .then(response => {
-            if (response.status === 200) {
+            if (response.data.success === true) {
               this.getAllDepartments();
               this.department = response.data
+              alert(response.data.message);
+            }
+            else {
+              alert(response.data.message);
             }
           })
           .catch(error => {
@@ -161,18 +148,12 @@ export default {
     deleteUserFromDepartment(userId, departmendId) {
       axios
         .delete(baseUrl + "/admin/departments/deleteUser", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          },
           params: {
             user: userId
           }
         })
         .then(response => {
           if (response.status === 200) {
-            // Show notification
-
-            // Refresh departments
             this.refreshDepartmentOnUserDelete(userId, departmendId);
           }
         })
@@ -183,26 +164,21 @@ export default {
 
     // Add user to a department by email adress
     addUserByEmail() {
+
       let userByEmail = document.getElementById("userSearch").value;
-      console.log(document.getElementById("userSearch").value);
+
       axios
         .get(baseUrl + "/admin/departments/addUser", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          },
           params: {
             email: userByEmail,
             department: this.department.id
           }
         })
         .then(response => {
-          if (response.status === 200) {
-            // Show notification
-
+          if (response.data.success === true) {
             // Refresh departments
             this.getAllDepartments();
             setTimeout(this.refreshDepartmentOnUserAdded, 100);
-            document.getElementById("userSearch").value = "";
           }
         })
         .catch(error => {

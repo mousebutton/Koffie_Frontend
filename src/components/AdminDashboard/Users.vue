@@ -9,8 +9,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="name in allUsers">
-                        <td>{{name.firstName}}</td>                                                 
+                    <tr v-for="user in allUsers">
+                        <td>{{user.email}}</td>                                                 
                     </tr>                    
                 </tbody>
             </table>
@@ -22,6 +22,8 @@
 
 <script>
 import axios from "axios";
+
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api";
 
 export default {
@@ -38,14 +40,9 @@ export default {
 
     getAllUsers() {
       axios
-        .get(baseUrl + "/admin/departments/users", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .get(baseUrl + "/admin/departments/users")
         .then(response => {
           this.allUsers = response.data;
-          console.log(this.allUsers);
         })
         .catch(error => {
           console.log(error);

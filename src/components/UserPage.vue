@@ -57,6 +57,7 @@ import axios from "axios";
 import Home from "@/components/Home";
 import UserParser from "@/util/UserParser";
 
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api";
 const maxAvatarByteSize = 200000; //  = 200kb
 const avatarFileToLargeMsg = "Max avatar size is 200kb";
@@ -81,16 +82,10 @@ export default {
     },
 
     fetchUserData() {
-      console.log(this.user);
       axios
-        .get(baseUrl + "/users/who", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .get(baseUrl + "/users/who")
         .then(response => {
           this.user = response.data;
-          console.log(this.user);
           localStorage.setItem("user", JSON.stringify(response.data));
         })
         .catch(error => {
@@ -119,11 +114,7 @@ export default {
 
     uploadAvatar() {
       axios
-        .post(baseUrl + "/users/avatar", this.user, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .post(baseUrl + "/users/avatar", this.user)
         .then(response => {
           localStorage.setItem("user", JSON.stringify(response.data));
         })
@@ -133,13 +124,8 @@ export default {
     },
 
     updateUser() {
-
       axios
-        .put(baseUrl + "/users/user", this.user, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .put(baseUrl + "/users/user", this.user)
         .then(response => {
           this.user = response.data;
           localStorage.setItem("user", JSON.stringify(response.data));

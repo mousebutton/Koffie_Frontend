@@ -27,6 +27,7 @@ import axios from "axios";
 import Canvas from "../canvas/Canvas";
 import WebsocketUtil from '../util/Websocket';
 
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api/admin/drinks";
 
 export default {
@@ -54,13 +55,8 @@ export default {
 
     getAllDrinks() {
       axios
-        .get(baseUrl + "/all", {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .get(baseUrl + "/all")
         .then(response => {
-          console.log(response.data);
           this.drinks = response.data;
         })
         .catch(error => {
