@@ -1,13 +1,36 @@
 <template>
-  <div>
-    <h2>{{departmentForCanvas.name}}</h2>
-    <h2>{{noDepartmentMsg}}</h2>
+<div class="container-fluid">
+  <div class="row">
       <div class="col-md-8">
         <canvas id="c"></canvas>
       </div>
-      <order-coffee ref="OrderCoffee"></order-coffee>
+      <div class="col-md-2">
+        <div class='info'>
+</div>
+<div class='chat'>
+  <header>
+    <h2 class='title'>
+      <a>Coffee orders</a>
+    </h2>
+  </header>
+
+  <div class='body'>
+    <ul>
+      <li v-for="order in orders">
+        <a class='thumbnail' >Avatar</a>
+        <div class='content'>
+          <h4>{{order}}</h4>
+          <h6>Username</h6>
+          <span class='meta'>2h ago 
+          </span>
+        </div>
+      </li>
+    </ul>
   </div>
-  
+</div>
+</div>
+</div>
+</div>
 </template>
 
 <script>
@@ -30,6 +53,7 @@ export default {
       // Websocket
       received_messages: [],
       received_notifications: [],
+      orders: [],
       send_message: null,
       connected: false,
 
@@ -83,7 +107,7 @@ export default {
     },
 
     mounted() {
-      // this.connectWebsocket();
+      this.connectWebsocket();
       this.user = JSON.parse(localStorage.getItem("user"));
       // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
     
@@ -91,6 +115,7 @@ export default {
         this.noDepartmentMsg =
           "You are not in a department yet, please contact an admin";
       } else {
+        this.orders = WebsocketUtil.getOrders();
         this.getCanvasForUser();
       }
       
@@ -103,63 +128,124 @@ export default {
 </script>
 
 <style scoped>
-.chat
-{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+body {
+  background: #e9e9e9;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.chat {
+  background: #ffffff;
+  width: 400px;
+  margin: 0 auto;
+}
+.chat header {
+  background: #2aa68b;
+  padding: 10px 15px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: move;
+}
+.chat header:before,
+.chat header:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.chat header h2,
+.chat .body ul li .content h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  float: left;
+}
+.chat header h2 a {
+  color: #ffffff;
+  text-decoration: none;
 }
 
-.chat li
-{
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px dotted #B3A9A9;
+.chat .body {
+  position: relative;
+  max-height: 600px;
+  overflow-y: scroll;
 }
 
-.chat li.left .chat-body
-{
-    margin-left: 10px;
+.chat .body ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #f2f2f2;
+}
+.chat .body ul li {
+  position: relative;
+  background: #ffffff;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.chat .body ul li:before,
+.chat .body ul li:after {
+  display: block;
+  content: '';
+  clear: both;
+}
+.chat .body ul li:hover .thumbnail {
+  background: #bd6982;
+}
+.chat .body ul li:nth-child(2n) {
+  background: #f2f2f2;
+}
+.chat .body ul li .thumbnail {
+  display: inline-block;
+  background: #bfbfbf;
+  width: 50px;
+  color: #ffffff;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: background 0.3s linear 0s;
+  -moz-transition: background 0.3s linear 0s;
+  -ms-transition: background 0.3s linear 0s;
+  -o-transition: background 0.3s linear 0s;
+  transition: background 0.3s linear 0s;
+}
+.chat .body ul li .thumbnail img {
+  width: 100%;
+}
+.chat .body ul li .content {
+  max-width: 200px;
+  min-width: 200px;
+  display: inline-block;
+  margin-left: 50px;
+  vertical-align: top;
+  line-height: 1;
 }
 
-.chat li.right .chat-body
-{
-    margin-right: 400px;
+.chat .body ul li .content .preview {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  min-width: 200px;
+  margin-bottom: 5px;
+
+}
+.chat .body ul li .content .meta {
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.chat .body ul li .content .meta a {
+  color: #999999;
+  text-decoration: none;
+}
+.chat .body ul li .content .meta a:hover {
+  text-decoration: underline;
 }
 
-
-.chat li .chat-body p
-{
-    margin: 0;
-    color: #777777;
+.info {
+  width: 300px;
+  margin: 25px auto;
+  text-align: center;
 }
 
-.panel .slidedown .glyphicon, .chat .glyphicon
-{
-    margin-right: 5px;
-}
-
-.panel-body
-{
-    overflow-y: scroll;
-    height: 750px;
-}
-
-::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar
-{
-    width: 12px;
-    background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar-thumb
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-    background-color: #555;
-}
 </style>

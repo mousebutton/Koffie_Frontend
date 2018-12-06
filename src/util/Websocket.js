@@ -4,6 +4,7 @@ import Stomp from "webstomp-client";
 
 let messages = [];
 let notifications = [];
+let orders = [];
 
 export default new class WebsocketUtil {
 
@@ -13,6 +14,10 @@ export default new class WebsocketUtil {
 
   getNotifications() {
     return notifications;
+  };
+
+  getOrders() {
+    return orders;
   };
 
   // Methods to register the websocket connection
@@ -30,6 +35,9 @@ export default new class WebsocketUtil {
           this.stompClient.subscribe("/global-message/user", msg => {
             notifications.push(msg.body);
           });
+          this.stompClient.subscribe("/global-message/newOrder", msg => {
+            orders.push(msg.body);
+          });
       },
       error => {
         console.log(error);
@@ -46,11 +54,20 @@ export default new class WebsocketUtil {
   };
 
   sendMessage(message) {
-    console.log(message);
     if (this.stompClient && this.stompClient.connected) {
       this.stompClient.send(
         "/app-receive/chat-message",
         message + "%" + localStorage.getItem("token"),
+        {}
+      );
+    }
+  };
+
+  sendNewCoffeeOrder() {
+    if (this.stompClient && this.stompClient.connected) {
+      this.stompClient.send(
+        "/app-receive/coffee-order",
+        'testt' + "%" + localStorage.getItem("token"),
         {}
       );
     }

@@ -27,7 +27,6 @@ export default {
   /* margin-top: 60px; */
 }
 
-
 #container {
   margin-top: 80px;
 }

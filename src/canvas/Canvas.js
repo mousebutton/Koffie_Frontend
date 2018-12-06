@@ -4,8 +4,8 @@ import CoffeeMachine from './CoffeeMachine'
 
 export default class Canvas {
 
-  constructor(canvasId, chairsForCanvas, coffeeMachine, orderModal) {
-    console.log(chairsForCanvas);
+  constructor(canvasId, chairsForCanvas, coffeeMachine, orderModal, orders) {
+    
     this.orderModal = orderModal;
     this.canvas = new fabric.Canvas(canvasId);
 
@@ -67,7 +67,7 @@ export default class Canvas {
 
   addCoffeeMachine(left, top) {
     new CoffeeMachine(this.canvas, "/static/coffee_machine.png", left, top, 0, 50)
-  }
+  };
 
   addTable(left, top, rotation) {
     fabric.Image.fromURL("/static/tafel.png", img => {

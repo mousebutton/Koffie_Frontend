@@ -1,6 +1,7 @@
 import {fabric} from 'fabric'
 import axios from "axios";
 
+
 export default class CoffeeMenu {
 
   constructor(canvas) {
@@ -40,6 +41,9 @@ export default class CoffeeMenu {
         pos[2] = {left: dialogContainer.left + 75, top: dialogContainer.top + 50};
         pos[3] = {left: dialogContainer.left + 75, top: dialogContainer.top + 100};
         pos[4] = {left: dialogContainer.left + 125, top: dialogContainer.top + 50};
+        pos[5] = {left: dialogContainer.left + 125, top: dialogContainer.top + 100};
+        pos[6] = {left: dialogContainer.left + 25, top: dialogContainer.top + 150};
+        pos[7] = {left: dialogContainer.left + 75, top: dialogContainer.top + 150};
 
         for (let i = 0; i < coffees.length; i++) {
           let coffeeType = coffees[i].name;
@@ -122,18 +126,21 @@ export default class CoffeeMenu {
       img.id = this.currentId;
 
       img.on("mouseup", (e) => {
+        let user = JSON.parse(localStorage.getItem("user"));
+        let id = user.id;
         axios
           .post("http://localhost:8080/api/users/makeorder", {
-            "coffee": "Latte 2",
+            "coffee": coffeeType,
             "milk": false,
-            "sugar": true
+            "sugar": true,
+            "userId": id
           })
           .then((e) => {
-            alert(e.data);
+
           });
       });
-
       this.canvas.add(img);
     });
   }
+
 }
