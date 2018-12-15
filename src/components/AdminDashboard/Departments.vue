@@ -125,7 +125,10 @@ export default {
             department.name +
             " still has users. \nCannot delete."
         );
-      } else {
+      } 
+      
+      else {
+        
         axios
           .delete(baseUrl + "/admin/departments/delete/" + department.id)
           .then(response => {

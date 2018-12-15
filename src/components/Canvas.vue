@@ -1,36 +1,39 @@
 <template>
-<div class="container-fluid">
-  <div class="row">
+  <div class="container-fluid">
+    <div class="row">
       <div class="col-md-8">
         <canvas id="c"></canvas>
       </div>
       <div class="col-md-2">
-        <div class='info'>
-</div>
-<div class='chat'>
-  <header>
-    <h2 class='title'>
-      <a>Coffee orders</a>
-    </h2>
-  </header>
+        <div class="info"></div>
+        <div class="chat">
+          <header>
+            <h2 class="title">
+              <a>Coffee orders</a>
+            </h2>
+             <button type="button" @click="sendList()">Send list</button>
+            
 
-  <div class='body'>
-    <ul>
-      <li v-for="order in orders">
-        <a class='thumbnail' >Avatar</a>
-        <div class='content'>
-          <h4>{{order}}</h4>
-          <h6>Username</h6>
-          <span class='meta'>2h ago 
-          </span>
+          </header>
+          <div class="body">
+            <ul>
+              <li v-for="order in orders">
+                <a class="thumbnail">Avatar</a>
+                <div class="content">
+                  <h4>{{order}}</h4>
+                  <h6>Username</h6>
+                  <span class="meta">2h ago</span>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </li>
-    </ul>
+      </div>
+        <div>
+      </div>
+    </div>
   </div>
-</div>
-</div>
-</div>
-</div>
+  
 </template>
 
 <script>
@@ -39,9 +42,10 @@ import Stomp from "webstomp-client";
 import Canvas from "../canvas/Canvas";
 import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
-import WebsocketUtil from '../util/Websocket';
+import WebsocketUtil from "../util/Websocket";
 
-axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
+axios.defaults.headers.common["Authorization"] =
+  "Bearer " + localStorage.getItem("token");
 
 const baseUrl = "http://localhost:8080/api";
 
@@ -66,71 +70,94 @@ export default {
     };
   },
 
-  components : {
-    'order-coffee' : OrderCoffee
+  components: {
+    "order-coffee": OrderCoffee
   },
 
   methods: {
-
-    orderCoffee(){
-        this.$refs.OrderCoffee.toggleModal();
+    orderCoffee() {
+      this.$refs.OrderCoffee.toggleModal();
     },
 
- connectWebsocket() {
-    WebsocketUtil.connectWebsocket();
-  },
+    connectWebsocket() {
+      WebsocketUtil.connectWebsocket();
+    },
 
-   disconnectWebsocket() {
-    WebsocketUtil.disconnectWebsocket();
-  },
+    disconnectWebsocket() {
+      WebsocketUtil.disconnectWebsocket();
+    },
 
     sendMessage() {
       WebsocketUtil.sendMessage(this.send_message);
     },
 
-
-      // Get the canvas based on the department the user is in
-      getCanvasForUser() {
-        axios
-          .get(baseUrl + "/canvas/department/" + this.user.department)
-          .then(response => {
-            this.chairsForCanvas = response.data.chairs;
-            this.coffeeMachine = response.data.coffeeMachine;
-            this.canvas = new Canvas("c", this.chairsForCanvas, this.coffeeMachine, this);
-            this.canvas.addStage();
-          })
-          .catch(error => {
-            console.log(error);
-          });
-          },
-
+    // Get the canvas based on the department the user is in
+    getCanvasForUser() {
+      axios
+        .get(baseUrl + "/canvas/department/" + this.user.department)
+        .then(response => {
+          this.chairsForCanvas = response.data.chairs;
+          this.coffeeMachine = response.data.coffeeMachine;
+          this.canvas = new Canvas(
+            "c",
+            this.chairsForCanvas,
+            this.coffeeMachine,
+            this
+          );
+          this.canvas.addStage();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
-    mounted() {
-      this.connectWebsocket();
-      this.user = JSON.parse(localStorage.getItem("user"));
-      // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
-    
-      if (this.user.department === "") {
-        this.noDepartmentMsg =
-          "You are not in a department yet, please contact an admin";
-      } else {
-        this.orders = WebsocketUtil.getOrders();
-        this.getCanvasForUser();
-      }
-      
-      // let chairsForCanvas = [];
-      // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
-      // this.canvas.addChairs(chairsForCanvas);
-      // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
+    exportOrderToEmail(receiverEmail, receiverName) {
+      var emailParams = {
+        receiver: receiverEmail,
+        to_name: receiverName,
+        name: "CoffeeApp",
+        notes: "New Coffee order"
+      };
+
+      emailjs.send(
+        "gmail",
+        "template_VglPhpDQ",
+        emailParams,
+        "user_lq764raJxEa8fLkjckZZR"
+      );
     }
-  };
+  },
+
+  sendList(){
+    console.log(12);
+  },
+
+  mounted() {
+    this.connectWebsocket();
+    this.user = JSON.parse(localStorage.getItem("user"));
+    // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+
+    if (this.user.department === "") {
+      this.noDepartmentMsg =
+        "You are not in a department yet, please contact an admin";
+    } else {
+      this.orders = WebsocketUtil.getOrders();
+      this.getCanvasForUser();
+    }
+
+    // let chairsForCanvas = [];
+    // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
+    // this.canvas.addChairs(chairsForCanvas);
+    // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
+  }
+
+}
 </script>
 
 <style scoped>
 body {
   background: #e9e9e9;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -149,7 +176,7 @@ body {
 .chat header:before,
 .chat header:after {
   display: block;
-  content: '';
+  content: "";
   clear: both;
 }
 .chat header h2,
@@ -187,7 +214,7 @@ body {
 .chat .body ul li:before,
 .chat .body ul li:after {
   display: block;
-  content: '';
+  content: "";
   clear: both;
 }
 .chat .body ul li:hover .thumbnail {
@@ -228,7 +255,6 @@ body {
   max-width: 200px;
   min-width: 200px;
   margin-bottom: 5px;
-
 }
 .chat .body ul li .content .meta {
   color: #b3b3b3;
@@ -246,6 +272,5 @@ body {
   width: 300px;
   margin: 25px auto;
   text-align: center;
-}
-
+};
 </style>
