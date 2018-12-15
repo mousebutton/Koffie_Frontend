@@ -19,8 +19,7 @@
       <li v-for="order in orders">
         <a class='thumbnail' >Avatar</a>
         <div class='content'>
-          <h4>{{order}}</h4>
-          <h6>Username</h6>
+          <h4>{{order.coffeeType}}</h4>
           <span class='meta'>2h ago 
           </span>
         </div>
@@ -54,6 +53,7 @@ export default {
       received_messages: [],
       received_notifications: [],
       orders: [],
+      test: [],
       send_message: null,
       connected: false,
 
@@ -104,6 +104,22 @@ export default {
           });
           },
 
+      getPendingCoffeeRequests() {
+          axios
+          .get(baseUrl + "/users/getRequests/" + this.user.department)
+          .then(response => {
+            this.orders = WebsocketUtil.getOrders();
+            this.test = response.data;
+            for(let i = 0; i < this.test.length; i ++) {
+              this.orders.push(this.test[i]);
+            }
+  
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+
     },
 
     mounted() {
@@ -115,7 +131,7 @@ export default {
         this.noDepartmentMsg =
           "You are not in a department yet, please contact an admin";
       } else {
-        this.orders = WebsocketUtil.getOrders();
+        this.getPendingCoffeeRequests();
         this.getCanvasForUser();
       }
       
