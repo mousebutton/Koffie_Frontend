@@ -11,23 +11,21 @@
             <h2 class="title">
               <a>Coffee orders</a>
             </h2>
-             <button type="button" @click="sendList()">Send list</button>
-            
-
           </header>
           <div class="body">
             <ul>
               <li v-for="order in orders">
-                <a class="thumbnail">Avatar</a>
+                <b-img rounded="circle" :src="order.user.avatar" class="thumbnail"></b-img>
                 <div class="content">
-                  <h4>{{order}}</h4>
-                  <h6>Username</h6>
-                  <span class="meta">2h ago</span>
+                  <h6>{{order.user.firstName}} {{order.user.lastName}} ordered</h6>
+                  <h4>{{order.coffeeType}}</h4>
+                  <span class="meta">{{order.orderDate}}</span>
                 </div>
               </li>
             </ul>
           </div>
         </div>
+         <button type="button" @click="sendList()">Send list</button>
       </div>
         <div>
       </div>
@@ -58,6 +56,7 @@ export default {
       received_messages: [],
       received_notifications: [],
       orders: [],
+      test: [],
       send_message: null,
       connected: false,
 
@@ -111,38 +110,80 @@ export default {
         });
     },
 
-    exportOrderToEmail(receiverEmail, receiverName) {
-      var emailParams = {
-        receiver: receiverEmail,
-        to_name: receiverName,
-        name: "CoffeeApp",
-        notes: "New Coffee order"
-      };
+      getPendingCoffeeRequests() {
+          axios
+          .get(baseUrl + "/users/getRequests/" + this.user.department)
+          .then(response => {
+            this.orders = WebsocketUtil.getOrders();
+            this.test = response.data;
+            for(let i = 0; i < this.test.length; i ++) {
+              this.orders.push(this.test[i]);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      },
 
+      generateEmailBody() {
+        let html = [];
+        const map = new Map();
+
+        this.orders.forEach((order) => {
+          const key = order.coffeeType;
+          const collection = map.get(key);
+          if (!collection) {
+            map.set(key, [order]);
+          }
+          else {
+            collection.push(order);
+          }
+        });
+        
+        map.forEach((order) => {
+          html.push('<h2>' + order[0].coffeeType + ' ' + order.length + ' x' + '</h2>');
+          order.forEach((details) => {
+            html.push('<h4>' +  details.user.firstName + details.user.lastName + '</h4>');
+          })                  
+        });
+       
+        return html.join('');
+      },
+
+      sendList(email, toName) {
+        var emailParams = {
+          receiver: 'blankentim1@gmail.com',
+          to_name: 'Tim Blanken',
+          name: "CoffeeApp",
+          notes: "Please find your coffee order details below: ",
+          // Generate email html body
+          message_html: this.generateEmailBody()
+      };
       emailjs.send(
         "gmail",
         "template_VglPhpDQ",
         emailParams,
         "user_lq764raJxEa8fLkjckZZR"
       );
-    }
-  },
-
-  sendList(){
-    console.log(12);
-  },
-
-  mounted() {
-    this.connectWebsocket();
-    this.user = JSON.parse(localStorage.getItem("user"));
-    // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
-
-    if (this.user.department === "") {
-      this.noDepartmentMsg =
-        "You are not in a department yet, please contact an admin";
-    } else {
-      this.orders = WebsocketUtil.getOrders();
-      this.getCanvasForUser();
+    }  
+    },
+    mounted() {
+      this.connectWebsocket();
+      this.user = JSON.parse(localStorage.getItem("user"));
+      // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+    
+      if (this.user.department === "") {
+        this.noDepartmentMsg =
+          "You are not in a department yet, please contact an admin";
+      } else {
+        this.getPendingCoffeeRequests();
+        this.getCanvasForUser();
+      }
+      
+      // let chairsForCanvas = [];
+      // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
+      // this.canvas.addChairs(chairsForCanvas);
+      // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
     }
 
     // let chairsForCanvas = [];
@@ -151,7 +192,6 @@ export default {
     // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
   }
 
-}
 </script>
 
 <style scoped>

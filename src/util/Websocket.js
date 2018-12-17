@@ -36,7 +36,8 @@ export default new class WebsocketUtil {
             notifications.push(msg.body);
           });
           this.stompClient.subscribe("/global-message/newOrder", msg => {
-            orders.push(msg.body);
+            orders.push(JSON.parse(msg.body));
+            console.log(orders);
           });
       },
       error => {
