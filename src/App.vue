@@ -7,6 +7,7 @@
 
 <script>
 import Navigation from "./components/Navigation";
+
 export default {
   name: "app",
   components: {
@@ -25,7 +26,6 @@ export default {
   color: #2c3e50;
   /* margin-top: 60px; */
 }
-
 
 #container {
   margin-top: 80px;

@@ -23,9 +23,9 @@ let router = new Router({
             component: () => import('@/components/Register'),
         },
         {
-            path: '/app',
+            path: '/canvas',
             name: 'Canvas',
-            component: () => import('@/canvas/Canvas'),
+            component: () => import('@/components/Canvas'),
         },
         {
             path: '/unauthorized',
@@ -52,13 +52,23 @@ let router = new Router({
                 {
                     path: '/users',
                     name: 'Users',
-                    component: () => import('@/components/Login')
+                    component: () => import('@/components/AdminDashboard/Users')
                 },
                 {
                     path: '/departments',
                     name: 'Departments',
                     component: () => import('@/components/AdminDashboard/Departments')
-                }
+                },
+                {
+                    path: '/coffee',
+                    name: 'Coffee',
+                    component: () => import('@/components/AdminDashboard/Coffees')
+                },
+                {
+                    path: '/canvas/edit',
+                    name: 'Canvas',
+                    component: () => import('@/components/AdminDashboard/Canvas')
+                }                
             ]
         }
     ]

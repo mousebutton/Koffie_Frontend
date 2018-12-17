@@ -23,6 +23,13 @@
                           </div>
 
                           <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Afdeling</label>
+                              <div class="col-sm-10">
+                                <input type="email"  readonly class="form-control" v-model="user.department">
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Firstname</label>
                               <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="user.firstName">
@@ -33,13 +40,6 @@
                             <label class="col-sm-2 col-form-label">Lastname</label>
                               <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="user.lastName">
-                              </div>
-                          </div>
-
-                          <div class="form-group row"  v-for="department in user.departments">
-                            <label class="col-sm-2 col-form-label">Afdeling</label>
-                              <div class="col-sm-10">
-                                <input type="text" disabled class="form-control" v-model="department.name">
                               </div>
                           </div>
                           
@@ -57,6 +57,7 @@ import axios from "axios";
 import Home from "@/components/Home";
 import UserParser from "@/util/UserParser";
 
+axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 const baseUrl = "http://localhost:8080/api";
 const maxAvatarByteSize = 200000; //  = 200kb
 const avatarFileToLargeMsg = "Max avatar size is 200kb";
@@ -68,29 +69,28 @@ export default {
 
   name: "UserPage",
 
-
   data() {
     return {
-      user: {
-        id: 0,
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        shortName: "",
-        avatar: "",
-        roles: [{ role: "" }],
-        departments: [{ name: "" }]
-      },
-
-      errorMsg: null,
-
+      user: {},
+      errorMsg: null
     };
   },
 
   methods: {
     openFileInput() {
       document.getElementById("imgupload").click();
+    },
+
+    fetchUserData() {
+      axios
+        .get(baseUrl + "/users/who")
+        .then(response => {
+          this.user = response.data;
+          localStorage.setItem("user", JSON.stringify(response.data));
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     onFileSelected(event) {
@@ -100,7 +100,6 @@ export default {
       var reader = new FileReader();
 
       if (file.size < maxAvatarByteSize) {
-        
         reader.readAsDataURL(file);
 
         reader.onload = event => {
@@ -115,13 +114,9 @@ export default {
 
     uploadAvatar() {
       axios
-        .post(baseUrl + "/users/avatar", this.user, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .post(baseUrl + "/users/avatar", this.user)
         .then(response => {
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
@@ -130,14 +125,10 @@ export default {
 
     updateUser() {
       axios
-        .put(baseUrl + "/users/user", this.user, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
-          }
-        })
+        .put(baseUrl + "/users/user", this.user)
         .then(response => {
           this.user = response.data;
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         })
         .catch(error => {
           console.log(error);
@@ -145,7 +136,7 @@ export default {
     }
   },
   beforeMount() {
-    this.user = JSON.parse(localStorage.getItem("user"));
+    this.fetchUserData();
   }
 };
 </script>
