@@ -9,7 +9,7 @@
         <div class="chat">
           <header>
             <h2 class="title">
-              <a>Coffee orders</a>
+              <a>Coffee orders for department {{user.department}}</a>
             </h2>
           </header>
           <div class="body">
@@ -25,7 +25,7 @@
             </ul>
           </div>
         </div>
-         <button type="button" @click="sendList()">Send list</button>
+         <b-btn class="btn btn-info" @click="processOrder()">Ik ga koffie halen</b-btn>
       </div>
         <div>
       </div>
@@ -42,8 +42,7 @@ import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
 import WebsocketUtil from "../util/Websocket";
 
-axios.defaults.headers.common["Authorization"] =
-  "Bearer " + localStorage.getItem("token");
+axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
 
 const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
 
@@ -165,7 +164,29 @@ export default {
         emailParams,
         "user_lq764raJxEa8fLkjckZZR"
       );
-    }  
+    },
+    
+    processOrder() {
+      let params = new URLSearchParams();
+      let orders = [];
+
+      this.orders.forEach((order) => {
+        orders.push(order.id);
+      });
+
+      params.append('userId', this.user.id);
+      params.append('orders', orders);
+
+      axios
+        .post(baseUrl + "/users/coffeeRound", params)
+        .then(response => {
+          console.log(response);
+          })
+        .catch(error => {
+          console.log(error);
+          });
+    }
+
     },
     mounted() {
       this.connectWebsocket();
@@ -179,17 +200,7 @@ export default {
         this.getPendingCoffeeRequests();
         this.getCanvasForUser();
       }
-      
-      // let chairsForCanvas = [];
-      // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
-      // this.canvas.addChairs(chairsForCanvas);
-      // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
     }
-
-    // let chairsForCanvas = [];
-    // let coffeeMachine = {leftPos: 100, topPos: 100, rotation: 0};
-    // this.canvas.addChairs(chairsForCanvas);
-    // this.canvas.addCoffeeMachine("/static/coffeemachine.png", coffeeMachine.leftPos, coffeeMachine.topPos, coffeeMachine.rotation, OrderCoffee);
   }
 
 </script>

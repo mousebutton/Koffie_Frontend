@@ -1,5 +1,9 @@
 <template>
 <div id="home">
+  <b-img src="https://29leef3dgbjy2kwtvj410dqv-wpengine.netdna-ssl.com/wp-content/uploads/2018/02/Generic-Coffee-Header.jpg" fluid-grow alt="Fluid-Grow image"/>
+  <div class="test">
+   
+  </div>
 </div>
 </template>
 
@@ -17,4 +21,5 @@ export default {
 </script>
 
 <style>
+
 </style>
