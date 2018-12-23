@@ -22,7 +22,7 @@ export default new class WebsocketUtil {
 
   // Methods to register the websocket connection
   connectWebsocket() {
-    this.socket = new SockJS("http://localhost:8080/websocket-endpoint");
+    this.socket = new SockJS("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/websocket-endpoint");
     this.stompClient = Stomp.over(this.socket);
     this.stompClient.connect(
       {},

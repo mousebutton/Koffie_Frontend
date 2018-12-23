@@ -58,7 +58,7 @@ import Home from "@/components/Home";
 import UserParser from "@/util/UserParser";
 
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://localhost:8080/api";
+const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
 const maxAvatarByteSize = 200000; //  = 200kb
 const avatarFileToLargeMsg = "Max avatar size is 200kb";
 

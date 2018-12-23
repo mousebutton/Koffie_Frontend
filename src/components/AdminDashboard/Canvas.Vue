@@ -30,15 +30,14 @@
       <!--Form to edit the Canvas-->
       <div class="col-md-8" v-if="selectedCanvas != null">
           <div class="form-group">
-            <label for="exampleInputEmail1">Description</label>
             <input type="text" class="form-control" v-model="selectedCanvas.description">
           </div>
 
           <div class="form-group"  v-if="selectedCanvas.department != null">
-            <label for="exampleSelect1">Bind department</label>
+            <label for="exampleSelect2">Bind department</label>
             <select
               class="form-control"
-              id="exampleSelect1"
+              id="exampleSelect2"
               v-model="selectedCanvas.department.name">
               <option>{{selectedCanvas.department.name}}</option>
               <option v-if="availableDepartments.length > 0" v-for="department in availableDepartments">{{department.name}}</option>
@@ -127,7 +126,7 @@
 <script>
 import axios from "axios";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://localhost:8080/api";
+const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
 
 export default {
   name: "CanvasEditor",

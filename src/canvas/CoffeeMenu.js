@@ -28,7 +28,7 @@ export default class CoffeeMenu {
     let closeButton = this.buildCloseButton(posLeft, posTop);
 
     axios
-      .get("http://localhost:8080/api/admin/drinks/all", {
+      .get("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api/admin/drinks/all", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }
@@ -129,7 +129,7 @@ export default class CoffeeMenu {
         let user = JSON.parse(localStorage.getItem("user"));
         let id = user.id;
         axios
-          .post("http://localhost:8080/api/users/makeorder", {
+          .post("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api/users/makeorder", {
             "coffee": coffeeType,
             "milk": false,
             "sugar": true,
