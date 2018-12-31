@@ -11,6 +11,7 @@ import Home from '@/components/Home'
 
 Vue.use(BootstrapVue, axios)
 Vue.config.productionTip = false
+Vue.config.devtools = true
 
 /* eslint-disable no-new */
 new Vue({
