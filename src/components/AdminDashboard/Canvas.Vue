@@ -125,8 +125,10 @@
 </template>
 <script>
 import axios from "axios";
+import config from "../../config/config"
+
+const baseUrl = config.url;
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
 
 export default {
   name: "CanvasEditor",

@@ -35,7 +35,9 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
+import config from "../config/config"
+
+const baseUrl = config.url;
 
 export default {
   name: "Register",

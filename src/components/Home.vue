@@ -11,11 +11,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-const baseUrl = "http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api";
-
 export default {
   name: "Home",
-
 
 };
 </script>
