@@ -46,7 +46,7 @@ import Drink from '@/models/Drink'
 import config from "../../config/config"
 
 
-const baseUrl = config.url;
+const baseUrl = config.url + "/api/admin/drinks";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 
 export default {

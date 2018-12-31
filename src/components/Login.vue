@@ -33,7 +33,7 @@
 import axios from "axios";
 import config from "../config/config"
 
-const baseUrl = config.url;
+const baseUrl = config.url+ "/api";
 
 export default {
   name: "Login",

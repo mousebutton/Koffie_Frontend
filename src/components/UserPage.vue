@@ -59,7 +59,7 @@ import Home from "@/components/Home";
 import UserParser from "@/util/UserParser";
 import config from "../config/config"
 
-const baseUrl = config.url;
+const baseUrl = config.url + "/api";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
 
 const maxAvatarByteSize = 200000; //  = 200kb
