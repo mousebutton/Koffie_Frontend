@@ -26,9 +26,10 @@
 import axios from "axios";
 import Canvas from "../canvas/Canvas";
 import WebsocketUtil from '../util/Websocket';
+import config from "../config/config"
 
+const baseUrl = config.url + "/api/admin/drinks";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://localhost:8080/api/admin/drinks";
 
 export default {
   name: "OrderCoffee",

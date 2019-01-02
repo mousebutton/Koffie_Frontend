@@ -23,8 +23,6 @@ import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/api";
-
 export default {
   name: "Home",
 
@@ -332,7 +330,11 @@ h1{
     outline: none;
 } 
 
+<<<<<<< HEAD
 #icon {
   width:30%;
 }
 </style>
+=======
+</style>
+>>>>>>> a854b1563bf71daa3d9d112990b243f392827182

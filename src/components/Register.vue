@@ -35,7 +35,9 @@
 
 <script>
 import axios from "axios";
-const baseUrl = "http://localhost:8080/api";
+import config from "../config/config"
+
+const baseUrl = config.url + "/api";
 
 export default {
   name: "Register",

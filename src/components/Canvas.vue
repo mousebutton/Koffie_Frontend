@@ -39,11 +39,12 @@ import Canvas from "../canvas/Canvas";
 import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
 import WebsocketUtil from "../util/Websocket";
+import config from "../config/config";
 
 axios.defaults.headers.common["Authorization"] =
   "Bearer " + localStorage.getItem("token");
 
-const baseUrl = "http://localhost:8080/api";
+const baseUrl = config.url + "/api"
 
 export default {
   name: "Canvas",

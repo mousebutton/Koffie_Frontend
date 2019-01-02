@@ -52,7 +52,6 @@ export default {
         ? this.$router.push("/")
         : this.$router.push("/profile");
     },
-
     goToAdminDashboard() {
       this.$router.push("/admin");
     },

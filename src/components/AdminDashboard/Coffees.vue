@@ -43,9 +43,11 @@
 <script>
 import axios from "axios";
 import Drink from '@/models/Drink'
+import config from "../../config/config"
 
+
+const baseUrl = config.url + "/api/admin/drinks";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://localhost:8080/api/admin/drinks";
 
 export default {
   name: "Koffies",

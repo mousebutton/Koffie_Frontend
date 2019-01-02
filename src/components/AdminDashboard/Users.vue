@@ -22,9 +22,10 @@
 
 <script>
 import axios from "axios";
+import config from "../../config/config"
 
+const baseUrl = config.url + "/api";
 axios.defaults.headers.common['Authorization'] = "Bearer " + localStorage.getItem("token");
-const baseUrl = "http://localhost:8080/api";
 
 export default {
   name: "Users",

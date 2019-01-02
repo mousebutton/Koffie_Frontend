@@ -31,8 +31,9 @@
 
 <script>
 import axios from "axios";
+import config from "../config/config"
 
-const baseUrl = "http://localhost:8080/api";
+const baseUrl = config.url+ "/api";
 
 export default {
   name: "Login",
