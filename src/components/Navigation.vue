@@ -2,14 +2,15 @@
 <div>
 <b-navbar id="navbar" toggleable="md" type="dark" fixed="top">
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-  <b-navbar-brand href="/">Coffee-App</b-navbar-brand>
+  <b-navbar-brand >Coffee-App</b-navbar-brand>
    <img src="/static/logo.png"/>
+  <b-navbar-brand href="/canvas">Canvas</b-navbar-brand>
   <b-collapse is-nav id="nav_collapse">
     <b-navbar-nav class="ml-auto">
       <b-nav-item-dropdown right>
-        <template slot="button-content"> <img src="/static/user-icon.png"/></template>
-        <b-dropdown-item @click="goto">Profile</b-dropdown-item>
-         <b-dropdown-item @click="goToAdminDashboard">Admin</b-dropdown-item>
+        <template slot="button-content"> <b-img rounded="circle" :src="img" class="thumbnail"></b-img></template>
+        <b-dropdown-item @click="gotoProfile">Profile</b-dropdown-item>
+         <b-dropdown-item v-if="isAdmin" @click="goToAdminDashboard">Admin</b-dropdown-item>
         <b-dropdown-item @click="logout">Logout</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
@@ -30,6 +31,8 @@ export default {
   name: "Navigation",
   data() {
     return {
+      img: "",
+      isAdmin: false,
       dismissSecs: 3,
       dismissCountDown: 0,
       showDismissibleAlert: false
@@ -37,16 +40,16 @@ export default {
   },
 
   methods: {
-    // TODO notify server so the token can be destroyed
     logout() {
       localStorage.clear();
       this.$router.push("/");
+      location.reload();
       this.showAlert();
     },
 
-    goto() {
+    gotoProfile() {
       localStorage.getItem("token") === null
-        ? this.$router.push("/login")
+        ? this.$router.push("/")
         : this.$router.push("/profile");
     },
 
@@ -60,6 +63,15 @@ export default {
     showAlert() {
       this.dismissCountDown = this.dismissSecs;
     }
+  },
+
+  mounted() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    user === null ? this.img = './static/user-icon.png' : this.img = user.avatar;
+    
+    if (localStorage.getItem("isAdmin") === 'true') {
+      this.isAdmin = true;
+    }
   }
 };
 </script>
@@ -68,6 +80,7 @@ export default {
 #navbar {
   background-color: #2aa68b;
   font-size: 20px;
+  color: white;
 }
 
 #alert {
@@ -94,5 +107,20 @@ export default {
   100% {
     opacity: 1;
   }
+}
+
+.thumbnail {
+  display: inline-block;
+  background: #bfbfbf;
+  width: 50px;
+  color: #ffffff;
+  line-height: 50px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: background 0.3s linear 0s;
+  -moz-transition: background 0.3s linear 0s;
+  -ms-transition: background 0.3s linear 0s;
+  -o-transition: background 0.3s linear 0s;
+  transition: background 0.3s linear 0s;
 }
 </style>

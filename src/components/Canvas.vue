@@ -25,13 +25,11 @@
             </ul>
           </div>
         </div>
-         <b-btn class="btn btn-info" @click="processOrder()">Ik ga koffie halen</b-btn>
+        <b-btn class="btn btn-info" @click="processOrder()">Ik ga koffie halen</b-btn>
       </div>
-        <div>
-      </div>
+      <div></div>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -42,7 +40,8 @@ import axios from "axios";
 import OrderCoffee from "./OrderCoffee";
 import WebsocketUtil from "../util/Websocket";
 
-axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+axios.defaults.headers.common["Authorization"] =
+  "Bearer " + localStorage.getItem("token");
 
 const baseUrl = "http://localhost:8080/api";
 
@@ -109,54 +108,57 @@ export default {
         });
     },
 
-      getPendingCoffeeRequests() {
-          axios
-          .get(baseUrl + "/users/getRequests/" + this.user.department)
-          .then(response => {
-            this.orders = WebsocketUtil.getOrders();
-            this.test = response.data;
-            for(let i = 0; i < this.test.length; i ++) {
-              this.orders.push(this.test[i]);
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      },
-
-      generateEmailBody() {
-        let html = [];
-        const map = new Map();
-
-        this.orders.forEach((order) => {
-          const key = order.coffeeType;
-          const collection = map.get(key);
-          if (!collection) {
-            map.set(key, [order]);
+    getPendingCoffeeRequests() {
+      axios 
+        .get(baseUrl + "/users/getRequests/" + this.user.department)
+        .then(response => {
+          this.orders = WebsocketUtil.getOrders();
+          this.test = response.data; 
+          for (let i = 0; i < this.test.length; i++) {
+            this.orders.push(this.test[i]);
           }
-          else {
-            collection.push(order);
-          }
+        })
+        .catch(error => {
+          console.log(error);
         });
-        
-        map.forEach((order) => {
-          html.push('<h2>' + order[0].coffeeType + ' ' + order.length + ' x' + '</h2>');
-          order.forEach((details) => {
-            html.push('<h4>' +  details.user.firstName + details.user.lastName + '</h4>');
-          })                  
-        });
-       
-        return html.join('');
-      },
+    },
 
-      sendList(email, toName) {
-        var emailParams = {
-          receiver: 'blankentim1@gmail.com',
-          to_name: 'Tim Blanken',
-          name: "CoffeeApp",
-          notes: "Please find your coffee order details below: ",
-          // Generate email html body
-          message_html: this.generateEmailBody()
+    generateEmailBody() {
+      let html = [];
+      const map = new Map();
+
+      this.orders.forEach(order => {
+        const key = order.coffeeType;
+        const collection = map.get(key);
+        if (!collection) {
+          map.set(key, [order]);
+        } else {
+          collection.push(order);
+        }
+      });
+
+      map.forEach(order => {
+        html.push(
+          "<h2>" + order[0].coffeeType + " " + order.length + " x" + "</h2>"
+        );
+        order.forEach(details => {
+          html.push(
+            "<h4>" + details.user.firstName + details.user.lastName + "</h4>"
+          );
+        });
+      });
+
+      return html.join("");
+    },
+
+    sendList() {
+      var emailParams = {
+        receiver: "blankentim1@gmail.com",
+        to_name: this.user.firstName + ' ' + this.user.lastName,
+        name: "CoffeeApp",
+        notes: "Please find your coffee order details below: ",
+        // Generate email html body
+        message_html: this.generateEmailBody()
       };
       emailjs.send(
         "gmail",
@@ -165,44 +167,45 @@ export default {
         "user_lq764raJxEa8fLkjckZZR"
       );
     },
-    
+
     processOrder() {
       let params = new URLSearchParams();
       let orders = [];
-
-      this.orders.forEach((order) => {
+      this.orders.forEach(order => {
         orders.push(order.id);
       });
-
-      params.append('userId', this.user.id);
-      params.append('orders', orders);
+      params.append("userId", this.user.id);
+      params.append("orders", orders);
+      this.sendList();
 
       axios
         .post(baseUrl + "/users/coffeeRound", params)
-        .then(response => {
-          console.log(response);
-          })
+        .then(response => {})
         .catch(error => {
           console.log(error);
-          });
+        });
     }
-
-    },
-    mounted() {
-      this.connectWebsocket();
-      this.user = JSON.parse(localStorage.getItem("user"));
-      // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
-    
-      if (this.user.department === "") {
-        this.noDepartmentMsg =
-          "You are not in a department yet, please contact an admin";
-      } else {
-        this.getPendingCoffeeRequests();
-        this.getCanvasForUser();
-      }
+  },
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        localStorage.removeItem('reloaded');
+    } 
+    else {
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+    this.connectWebsocket();
+    this.user = JSON.parse(localStorage.getItem("user"));
+    // this.user = {department: "Verkoop", coffeeMachine: {leftPos: 100, rightPos: 100}};
+    if (this.user.department === "") {
+      this.noDepartmentMsg =
+        "You are not in a department yet, please contact an admin";
+    } else {
+      this.getPendingCoffeeRequests();
+      this.getCanvasForUser();
     }
   }
-
+};
 </script>
 
 <style scoped>
@@ -323,5 +326,5 @@ body {
   width: 300px;
   margin: 25px auto;
   text-align: center;
-};
+}
 </style>

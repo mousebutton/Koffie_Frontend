@@ -1,12 +1,11 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 
-
-let messages = [];
-let notifications = [];
-let orders = [];
-
 export default new class WebsocketUtil {
+
+  messages = [];
+  notifications = [];
+  orders = [];
 
   getMessages() {
     return messages;
@@ -17,7 +16,7 @@ export default new class WebsocketUtil {
   };
 
   getOrders() {
-    return orders;
+    return this.orders;
   };
 
   // Methods to register the websocket connection
@@ -25,7 +24,6 @@ export default new class WebsocketUtil {
     let user = JSON.parse(localStorage.getItem('user'));
     this.socket = new SockJS("http://localhost:8080/websocket-endpoint");
     this.stompClient = Stomp.over(this.socket);
-    console.log(user.department);
     this.stompClient.connect(
       {},
       connectEvent => {
@@ -33,14 +31,15 @@ export default new class WebsocketUtil {
         // Subscribe to the topics to receive messages from the server
         this.stompClient.subscribe("/global-message/coffeeRound/" + user.department, msg => {
           alert(msg.body + ' gaat koffie halen');
-          orders.splice(0);
+          this.orders.splice(0);
 
         }),
           this.stompClient.subscribe("/global-message/user", msg => {
             notifications.push(msg.body);
           });
           this.stompClient.subscribe("/global-message/newOrder/" + user.department, msg => {
-              orders.push(JSON.parse(msg.body));
+            console.log('add new order to list ');
+              this.orders.push(JSON.parse(msg.body));
           });
       },
       error => {

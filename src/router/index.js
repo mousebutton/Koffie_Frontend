@@ -12,20 +12,18 @@ let router = new Router({
             name: 'Home',
             component: () => import('@/components/Home'),
         },
-        {
-            path: '/login',
-            name: 'Login',
-            component: () => import('@/components/Login'),
-        },
-        {
-            path: '/register',
-            name: 'Register',
-            component: () => import('@/components/Register'),
-        },
+        // {
+        //     path: '/register',
+        //     name: 'Register',
+        //     component: () => import('@/components/Home'),
+        // },
         {
             path: '/canvas',
             name: 'Canvas',
             component: () => import('@/components/Canvas'),
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/unauthorized',
@@ -91,7 +89,7 @@ router.beforeEach((to, from, next) => {
         // No token, no user is logged in, redirect to login page
         if (localStorage.getItem('token') == null) {
             next({
-                path: '/login',
+                path: '/',
                 params: { nextUrl: to.fullPath }
             })
         }

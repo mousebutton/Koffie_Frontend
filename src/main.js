@@ -13,9 +13,10 @@ Vue.use(BootstrapVue, axios)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+var vm = new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App, Home }
 })
+global.vm = vm; 
