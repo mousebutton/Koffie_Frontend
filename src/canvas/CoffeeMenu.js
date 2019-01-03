@@ -1,6 +1,7 @@
 import {fabric} from 'fabric'
 import axios from "axios";
-
+import config from "../config/config";
+const baseUrl = config.url + "/api"
 
 export default class CoffeeMenu {
 
@@ -28,7 +29,7 @@ export default class CoffeeMenu {
     let closeButton = this.buildCloseButton(posLeft, posTop);
 
     axios
-      .get("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api/admin/drinks/all", {
+      .get(baseUrl + "/admin/drinks/all", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token")
         }

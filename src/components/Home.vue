@@ -22,7 +22,8 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import axios from "axios";
-
+import config from "../config/config";
+const baseUrl = config.url + "/api"
 export default {
   name: "Home",
 
