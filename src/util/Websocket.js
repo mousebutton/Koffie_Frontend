@@ -1,6 +1,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-
+import config from "../config/config";
+const baseUrl = config.url;
 export default new class WebsocketUtil {
 
   messages = [];
@@ -21,7 +22,7 @@ export default new class WebsocketUtil {
 
   // Methods to register the websocket connection
   connectWebsocket() {
-    this.socket = new SockJS("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/websocket-endpoint");
+    this.socket = new SockJS(baseUrl + "/websocket-endpoint");
     let user = JSON.parse(localStorage.getItem('user'));
     this.stompClient = Stomp.over(this.socket);
     this.stompClient.connect(

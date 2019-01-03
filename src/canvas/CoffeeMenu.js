@@ -130,7 +130,7 @@ export default class CoffeeMenu {
         let user = JSON.parse(localStorage.getItem("user"));
         let id = user.id;
         axios
-          .post("http://ec2-54-93-222-44.eu-central-1.compute.amazonaws.com:8080/api/users/makeorder", {
+          .post(baseUrl + "/users/makeorder", {
             "coffee": coffeeType,
             "milk": false,
             "sugar": true,
