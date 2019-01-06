@@ -3,6 +3,10 @@ import axios from "axios";
 import config from "../config/config";
 const baseUrl = config.url + "/api"
 
+var selectedCoffee = '';
+var sugar = false;
+var milk = false;
+
 export default class CoffeeMenu {
 
   constructor(canvas) {
@@ -19,14 +23,12 @@ export default class CoffeeMenu {
 
   buildDialog(left, top) {
     let containerWidth = 180;
-    let containerHeight = 200;
-
+    let containerHeight = 360;
     let dialogContainer = this.buildContainer(containerWidth, containerHeight, left, top);
-
     let posLeft = dialogContainer.left + containerWidth - 25;
     let posTop = dialogContainer.top + 5;
-
     let closeButton = this.buildCloseButton(posLeft, posTop);
+    let orderButton = this.buildOrderButton(480, 320);
 
     axios
       .get(baseUrl + "/admin/drinks/all", {
@@ -56,9 +58,11 @@ export default class CoffeeMenu {
         console.log(error);
       });
 
-    // this.addCoffeeType("cocao", dialogContainer.left + 75, dialogContainer.top + 50);
 
     closeButton.on("mouseup", (e) => {
+      this.selectedCoffee = '';
+      this.milk = false;
+      this.sugar = false;
       let id = e.target.id;
       console.log("remove objects with id: " + id);
       this.canvas.getObjects().forEach((object) => {
@@ -69,8 +73,77 @@ export default class CoffeeMenu {
       this.canvas.renderAll();
     });
 
+    orderButton.on("mouseup", (e) => {
+      this.orderCoffee();
+    });
+
     this.canvas.add(dialogContainer);
+    this.buildSugarbutton('https://image.flaticon.com/icons/svg/1346/1346528.svg', 490,260);
+    this.buildMilkButton('https://image.flaticon.com/icons/svg/1338/1338869.svg', 550, 260);
     this.canvas.add(closeButton);
+    this.canvas.add(orderButton);
+  }
+
+  buildSugarbutton(coffeeUrl, left, top) {
+    fabric.Image.fromURL(coffeeUrl, img => {
+      img.left = left;
+      img.top = top;
+      img.centeredRotation = true;
+      img.hoverCursor = "pointer";
+      img.selectable = false;
+      img.originX = "center";
+      img.originY = "center";
+      img.scaleX = 0.06;
+      img.scaleY = 0.06;
+
+      img.objectType = "coffee";
+      img.id = this.currentId;
+
+      img.on("mouseup", (e) => {
+          this.sugar = !this.sugar;
+      });
+      this.canvas.add(img);
+    });
+  }
+
+  buildMilkButton(coffeeUrl, left, top) {
+    fabric.Image.fromURL(coffeeUrl, img => {
+      img.left = left;
+      img.top = top;
+      img.centeredRotation = true;
+      img.hoverCursor = "pointer";
+      img.selectable = false;
+      img.originX = "center";
+      img.originY = "center";
+      img.scaleX = 0.06;
+      img.scaleY = 0.06;
+
+      img.objectType = "coffee";
+      img.id = this.currentId;
+
+      img.on("mouseup", (e) => {
+        this.milk = !this.milk;
+      });
+      this.canvas.add(img);
+    });
+  }
+
+  buildOrderButton(left, top) {
+    return new fabric.Rect({
+      width: 100, height: 20,
+      fill: "green",
+      stroke: "green",
+      strokeWidth: 1,
+      hoverCursor: "pointer",
+      left: left,
+      top: top,
+      selectable: false,
+      centeredRotation: true,
+      objectType: "dialogClose",
+      id: this.currentId,
+      rx: 5,
+      ry: 5
+    });
   }
 
   buildContainer(containerWidth, containerHeight, left, top) {
@@ -79,7 +152,6 @@ export default class CoffeeMenu {
       fill: "#aaa49d",
       stroke: "black",
       strokeWidth: 1,
-
       left: left + 45,
       top: top - 60,
       selectable: false,
@@ -110,7 +182,6 @@ export default class CoffeeMenu {
   }
 
   addCoffeeType(coffeeType, coffeeUrl, left, top) {
-
     fabric.Image.fromURL(coffeeUrl, img => {
       img.left = left;
       img.top = top;
@@ -121,27 +192,32 @@ export default class CoffeeMenu {
       img.originY = "center";
       img.scaleX = 0.3;
       img.scaleY = 0.3;
-
       img.objectType = "coffee";
       img.coffeeType = coffeeType;
       img.id = this.currentId;
 
       img.on("mouseup", (e) => {
-        let user = JSON.parse(localStorage.getItem("user"));
-        let id = user.id;
-        axios
-          .post(baseUrl + "/users/makeorder", {
-            "coffee": coffeeType,
-            "milk": false,
-            "sugar": true,
-            "userId": id
-          })
-          .then((e) => {
-
-          });
+        this.sugar = false;
+        this.milk = false;
+        this.selectedCoffee = coffeeType;
       });
       this.canvas.add(img);
     });
+  }
+
+  orderCoffee = function() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    let id = user.id;
+    axios
+      .post(baseUrl + "/users/makeorder", {
+        "coffee": this.selectedCoffee,
+        "milk": this.milk,
+        "sugar": this.sugar,
+        "userId": id
+      })
+      .then((e) => {
+
+      });
   }
 
 }

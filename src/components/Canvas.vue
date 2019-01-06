@@ -19,6 +19,9 @@
                 <div class="content">
                   <h6>{{order.user.firstName}} {{order.user.lastName}} ordered</h6>
                   <h4>{{order.coffeeType}}</h4>
+                  <h6 v-if="order.sugar">Sugar</h6>
+                  <h6 v-if="order.milk">Milk</h6>
+
                   <span class="meta">{{order.orderDate}}</span>
                 </div>
               </li>

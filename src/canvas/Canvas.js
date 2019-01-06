@@ -40,6 +40,8 @@ export default class Canvas {
 
     this.addCoffeeMachine(400, 100);
     this.addTable(250, 280, 0);
+    this.addTable(650, 280, 0);
+    this.addTable(450, 580, 0);
   }
 
   addBackground() {

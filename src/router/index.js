@@ -61,12 +61,12 @@ let router = new Router({
                     path: '/coffee',
                     name: 'Coffee',
                     component: () => import('@/components/AdminDashboard/Coffees')
-                } /*,
+                },
                 {
                     path: '/canvas/edit',
                     name: 'Canvas',
                     component: () => import('@/components/AdminDashboard/Canvas')
-                } */              
+                }          
             ]
         }
     ]

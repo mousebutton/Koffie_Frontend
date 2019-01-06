@@ -2,8 +2,8 @@ import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import config from "../config/config";
 const baseUrl = config.url;
-export default new class WebsocketUtil {
 
+export default new class WebsocketUtil {
   messages = [];
   notifications = [];
   orders = [];
@@ -33,7 +33,6 @@ export default new class WebsocketUtil {
         this.stompClient.subscribe("/global-message/coffeeRound/" + user.department, msg => {
           alert(msg.body + ' gaat koffie halen');
           this.orders.splice(0);
-
         }),
           this.stompClient.subscribe("/global-message/user", msg => {
             notifications.push(msg.body);
