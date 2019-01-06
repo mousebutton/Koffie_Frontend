@@ -65,7 +65,7 @@ let router = new Router({
                 {
                     path: '/canvas/edit',
                     name: 'Canvas',
-                    component: () => import('@/components/AdminDashboard/Canvas')
+                    component: () => import('@/components/AdminDashboard/AdminCanvas')
                 }          
             ]
         }
