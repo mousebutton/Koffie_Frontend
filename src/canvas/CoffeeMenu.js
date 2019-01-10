@@ -228,8 +228,8 @@ export default class CoffeeMenu {
     });
   }
 
-  buildCoffeeTypeText() {
-    return new fabric.Text(this.selectedCoffee + '',  {
+  buildCoffeeTypeText(text) {
+    return new fabric.Text(text,  {
         left: 480,
         top: 230,
         fontSize: 24,
@@ -259,7 +259,7 @@ export default class CoffeeMenu {
         this.updateMilkButton();
         this.updateSugarButton();
         this.selectedCoffee = coffeeType;
-        this.coffeeText = this.buildCoffeeTypeText();
+        this.coffeeText = this.buildCoffeeTypeText(coffeeType);
         this.updateTextObjects();
         this.canvas.add(this.coffeeText);
       });
@@ -278,7 +278,9 @@ export default class CoffeeMenu {
   orderCoffee = function() {
     let user = JSON.parse(localStorage.getItem("user"));
     let id = user.id;
-    axios
+
+    if (this.selectedCoffee != undefined && this.selectedCoffee != '') {
+      axios
       .post(baseUrl + "/users/makeorder", {
         "coffee": this.selectedCoffee,
         "milk": this.milk,
@@ -299,5 +301,13 @@ export default class CoffeeMenu {
           this.canvas.renderAll();
         }
       });
+    }
+
+    else {
+      this.coffeeText = this.buildCoffeeTypeText('Select drink');
+      this.updateTextObjects();
+      this.canvas.add(this.coffeeText);
+    }
+
   }
 }

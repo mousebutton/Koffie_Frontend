@@ -17,7 +17,6 @@ export default class PersoonDialog {
       fill: "#aaa49d",
       stroke: "black",
       strokeWidth: 1,
-
       left: left + 30,
       top: top - 25,
       selectable: false,
@@ -47,9 +46,11 @@ export default class PersoonDialog {
       ry: 5
     });
 
-    // dynamic
-    let userDetails = new fabric.Text( user.firstName + ' ' + user.lastName + '\n' + 
-                                        user.email, {
+    let userDetails = new fabric.Text(
+      user.firstName + ' ' + 
+      user.lastName + '\n' +  
+      user.email + '\n' , {
+
       left: left + 30,
       top: top - 25,
       fontSize: 12,
@@ -61,29 +62,17 @@ export default class PersoonDialog {
 
     closeButton.on("mouseup", (e) => {
       let id = e.target.id;
-      console.log("remove objects with id: " + id);
       this.canvas.getObjects().forEach((object) => {
         if (object.id == id) {
           this.canvas.remove(object);
-
-          // dynamic
           this.canvas.remove(userDetails);
         }
       });
       this.canvas.renderAll();
     });
 
-    
-
     this.canvas.add(dialogContainer);
     this.canvas.add(closeButton);
-
-    // dynamic
     this.canvas.add(userDetails);
-
-    // this.currentId += 1;
-    //create rect (omhulsel)
-    //create rect (close knop, kan ook image worden)
-    //create images (de koffie knoppen)
   }
 }

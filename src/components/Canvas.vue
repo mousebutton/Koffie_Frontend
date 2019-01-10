@@ -138,7 +138,7 @@ export default {
           collection.push(order);
         }
       });
-
+      
       map.forEach(order => {
         html.push(
           "<h2>" + order[0].coffeeType + " " + order.length + " x" + "</h2>"
