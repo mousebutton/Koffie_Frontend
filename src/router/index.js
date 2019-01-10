@@ -5,7 +5,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 let router = new Router({
-    mode: 'history',
+    //mode: 'history',
     routes: [
         {
             path: '/',
@@ -65,7 +65,7 @@ let router = new Router({
                 {
                     path: '/canvas/edit',
                     name: 'Canvas',
-                    component: () => import('@/components/AdminDashboard/Canvas')
+                    component: () => import('@/components/AdminDashboard/AdminCanvas')
                 }          
             ]
         }

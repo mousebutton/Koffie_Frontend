@@ -155,7 +155,7 @@ export default {
 
     sendList() {
       var emailParams = {
-        receiver: "blankentim1@gmail.com",
+        receiver: this.user.email,
         to_name: this.user.firstName + ' ' + this.user.lastName,
         name: "CoffeeApp",
         notes: "Please find your coffee order details below: ",
