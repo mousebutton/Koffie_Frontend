@@ -14,7 +14,7 @@ export default class PersoonDialog {
 
     let dialogContainer = new fabric.Rect({
       width: containerWidth, height: containerHeight,
-      fill: "#bfad0f",
+      fill: "#aaa49d",
       stroke: "black",
       strokeWidth: 1,
 
@@ -52,7 +52,11 @@ export default class PersoonDialog {
                                         user.email, {
       left: left + 30,
       top: top - 25,
-      fontSize: 22,
+      fontSize: 12,
+      fontFamily: 'Helvetica',
+      hasBorders: false,
+      hasControls: false,
+      hasRotatingPoint: false
     });
 
     closeButton.on("mouseup", (e) => {

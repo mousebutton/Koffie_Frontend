@@ -6,6 +6,8 @@ const baseUrl = config.url + "/api"
 var selectedCoffee = '';
 var sugar = false;
 var milk = false;
+var dialogId;
+var coffeeText = '';
 
 export default class CoffeeMenu {
 
@@ -28,7 +30,7 @@ export default class CoffeeMenu {
     let posLeft = dialogContainer.left + containerWidth - 25;
     let posTop = dialogContainer.top + 5;
     let closeButton = this.buildCloseButton(posLeft, posTop);
-    let orderButton = this.buildOrderButton(480, 320);
+    let orderButton = this.buildOrderButton(455, 340);
 
     axios
       .get(baseUrl + "/admin/drinks/all", {
@@ -64,24 +66,25 @@ export default class CoffeeMenu {
       this.milk = false;
       this.sugar = false;
       let id = e.target.id;
-      console.log("remove objects with id: " + id);
       this.canvas.getObjects().forEach((object) => {
         if (object.id == id) {
           this.canvas.remove(object);
         }
       });
+      this.updateTextObjects();
       this.canvas.renderAll();
     });
 
     orderButton.on("mouseup", (e) => {
       this.orderCoffee();
     });
-
+    this.dialogId = dialogContainer.id;
     this.canvas.add(dialogContainer);
-    this.buildSugarbutton('https://image.flaticon.com/icons/svg/1346/1346528.svg', 490,260);
-    this.buildMilkButton('https://image.flaticon.com/icons/svg/1338/1338869.svg', 550, 260);
+    this.buildSugarbutton('../static/no-sugar.png', 490,300);
+    this.buildMilkButton('../static/no-milk.png', 570, 300);
     this.canvas.add(closeButton);
     this.canvas.add(orderButton);
+    
   }
 
   buildSugarbutton(coffeeUrl, left, top) {
@@ -95,13 +98,35 @@ export default class CoffeeMenu {
       img.originY = "center";
       img.scaleX = 0.06;
       img.scaleY = 0.06;
-
       img.objectType = "coffee";
       img.id = this.currentId;
-
       img.on("mouseup", (e) => {
           this.sugar = !this.sugar;
+          this.updateSugarButton();
       });
+      this.canvas.add(img);
+    });
+  }
+
+  updateSugarButton() {
+    let imageUrl = this.sugar? '../static/sugar.png' : '../static/no-sugar.png';
+    fabric.Image.fromURL(imageUrl, img => {
+      img.left = 490;
+      img.top = 300;
+      img.centeredRotation = true;
+      img.hoverCursor = "pointer";
+      img.selectable = false;
+      img.originX = "center";
+      img.originY = "center";
+      img.scaleX = 0.06;
+      img.scaleY = 0.06;
+      img.objectType = "coffee";
+      img.id = this.currentId;
+      img.on("mouseup", (e) => {
+        this.sugar = !this.sugar;
+        this.updateSugarButton();
+    });
+
       this.canvas.add(img);
     });
   }
@@ -117,20 +142,42 @@ export default class CoffeeMenu {
       img.originY = "center";
       img.scaleX = 0.06;
       img.scaleY = 0.06;
-
       img.objectType = "coffee";
       img.id = this.currentId;
-
       img.on("mouseup", (e) => {
         this.milk = !this.milk;
+        this.updateMilkButton();
       });
+      this.canvas.add(img);
+    });
+  }
+
+  updateMilkButton() {
+    let imageUrl = this.milk? '../static/milk.png' : '../static/no-milk.png';
+    fabric.Image.fromURL(imageUrl, img => {
+      img.left = 570;
+      img.top = 300;
+      img.centeredRotation = true;
+      img.hoverCursor = "pointer";
+      img.selectable = false;
+      img.originX = "center";
+      img.originY = "center";
+      img.scaleX = 0.06;
+      img.scaleY = 0.06;
+      img.objectType = "coffee";
+      img.id = this.currentId;
+      img.on("mouseup", (e) => {
+        this.milk = !this.milk;
+        this.updateMilkButton();
+    });
+
       this.canvas.add(img);
     });
   }
 
   buildOrderButton(left, top) {
     return new fabric.Rect({
-      width: 100, height: 20,
+      width: 160, height: 40,
       fill: "green",
       stroke: "green",
       strokeWidth: 1,
@@ -181,6 +228,16 @@ export default class CoffeeMenu {
     });
   }
 
+  buildCoffeeTypeText() {
+    return new fabric.Text(this.selectedCoffee + '',  {
+        left: 480,
+        top: 230,
+        fontSize: 24,
+        fontFamily: 'Helvetica',
+        hasControls: false
+    });
+  }
+
   addCoffeeType(coffeeType, coffeeUrl, left, top) {
     fabric.Image.fromURL(coffeeUrl, img => {
       img.left = left;
@@ -199,9 +256,22 @@ export default class CoffeeMenu {
       img.on("mouseup", (e) => {
         this.sugar = false;
         this.milk = false;
+        this.updateMilkButton();
+        this.updateSugarButton();
         this.selectedCoffee = coffeeType;
+        this.coffeeText = this.buildCoffeeTypeText();
+        this.updateTextObjects();
+        this.canvas.add(this.coffeeText);
       });
       this.canvas.add(img);
+    });
+  }
+
+  updateTextObjects = function() {
+    this.canvas.getObjects().forEach((object) => {
+      if(object.left === this.coffeeText.left && object.top === this.coffeeText.top) {
+        this.canvas.remove(object);
+      }
     });
   }
 
@@ -216,8 +286,18 @@ export default class CoffeeMenu {
         "userId": id
       })
       .then((e) => {
-
+        this.selectedCoffee = '';
+        this.milk = false;
+        this.sugar = false;
+        if(e.status === 200) {
+          this.canvas.getObjects().forEach((object) => {
+            if (object.id == this.dialogId) {
+              this.canvas.remove(object);
+              this.updateTextObjects();
+            }
+          });
+          this.canvas.renderAll();
+        }
       });
   }
-
 }
