@@ -5,8 +5,9 @@
   <b-btn @click="show=true" variant="info">Add drink</b-btn>
 </div>
 <div class="row">
-  <div v-for="drink in drinks" class="col-md-3" @click="editDrink(drink)">
+  <div v-for="drink in drinks" class="col-md-3">
       <b-card id="coffeeCard">
+      <b-btn size="md" class="float-right" variant="danger" @click="deleteDrink(drink)">X</b-btn>
          <img :src="drink.imageUrl">
         <h4 class="card-text">{{drink.name}}</h4>
       </b-card>
@@ -18,11 +19,11 @@
        <b-container fluid>
          <b-row class="mb-1">
            <h6 id="errorMsg">{{errorMsg}}</h6>
-          <b-input placeholder="name" v-model="drink.name" autofocus autocomplete="off"></b-input>
+          <b-input placeholder="name" v-model="newDrink.name" autofocus autocomplete="off"></b-input>
          </b-row>
         
          <b-row class="mb-1">
-            <b-form-file v-model="drink.imageUrl" placeholder="Choose a image..."></b-form-file>
+            <b-form-file placeholder="Choose a image..." v-model="newDrink.imageUrl" accept="image/jpeg, image/png, image/gif" ref="fileinput"></b-form-file>
          </b-row>
 
        </b-container>
@@ -57,6 +58,7 @@ export default {
       show: false,
 
       drink: {name: '', imageUrl: ''},
+      newDrink: {name: '', imageUrl: ''},
       drinks: [],
       errorMsg: ''
     };
@@ -81,8 +83,23 @@ export default {
 
     saveDrink(){
       axios
-        .post(baseUrl + "/add", new Drink(this.drink))
+        .post(baseUrl + "/add", new Drink(this.newDrink))
         .then(response => {
+          this.newDrink.name = '';
+          this.newDrink.imageUrl = '';
+          this.$refs.fileinput.reset();
+          this.getAllDrinks();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+    deleteDrink(drink){
+      axios
+        .delete(baseUrl + "/delete", {params: {drinkId:drink.id}})
+        .then(response => {
+          this.getAllDrinks();
         })
         .catch(error => {
           console.log(error);
@@ -90,13 +107,13 @@ export default {
     },
 
     addDrink() {
-      if (this.drink.name != '') {
-          this.drinks.push(new Drink(this.drink));
+      if (this.newDrink.name != '' && (this.newDrink.imageUrl != '' & this.newDrink.imageUrl != null)) {
+          this.drinks.push(new Drink(this.newDrink));
           this.show = !this.show;
           this.saveDrink();
       }
       else {
-        this.errorMsg = 'Please enter the name';
+        this.errorMsg = 'Please enter the name and pick an image';
       }
       
     },
