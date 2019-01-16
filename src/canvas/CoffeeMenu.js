@@ -178,9 +178,9 @@ export default class CoffeeMenu {
   buildOrderButton(left, top) {
     return new fabric.Rect({
       width: 160, height: 40,
-      fill: "green",
+      fill: "lightGreen",
       stroke: "green",
-      strokeWidth: 1,
+      strokeWidth: 2,
       hoverCursor: "pointer",
       left: left,
       top: top,
@@ -234,7 +234,9 @@ export default class CoffeeMenu {
         top: 230,
         fontSize: 24,
         fontFamily: 'Helvetica',
-        hasControls: false
+        hasControls: false,
+        lockMovementX: true,
+        lockMovementY: true
     });
   }
 

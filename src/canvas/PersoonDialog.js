@@ -57,7 +57,9 @@ export default class PersoonDialog {
       fontFamily: 'Helvetica',
       hasBorders: false,
       hasControls: false,
-      hasRotatingPoint: false
+      hasRotatingPoint: false,
+      lockMovementX: true,
+      lockMovementY: true
     });
 
     closeButton.on("mouseup", (e) => {
