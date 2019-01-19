@@ -2,10 +2,8 @@
   <div class="container">
     <h4 id="successMessage" v-if="registrationSucceeded">Registration completed :-) you will be redirected to the login page</h4>
     <h2 v-if="!registrationSucceeded">Create your account</h2>
-    <p v-if="!registrationSucceeded">Please fill out the required information</p>
-    
+    <p v-if="!registrationSucceeded">Please fill out the required information</p>    
     <b-form id="registerForm" @submit.prevent="registerUser" v-if="!registrationSucceeded">
-
       <b-form-group>
         <b-form-input 
           id="email"  
@@ -13,8 +11,7 @@
           type="email"
           placeholder="Enter your email adress">
         </b-form-input>
-      </b-form-group>
-   
+      </b-form-group>   
       <b-form-group>
         <b-form-input 
           id="password" 
@@ -24,12 +21,13 @@
           placeholder="Enter your password">
         </b-form-input>
         <b-form-invalid-feedback>Enter at least 6 characters</b-form-invalid-feedback>
+        <br>
+        <input @change="adminRole" type="checkbox" value="Admin rol">        
+        <label for="admin">Admin</label>   
       </b-form-group>
-
       <b-button id="submitButton" type="submit" variant="primary">Submit</b-button>
       <b-button type="reset" variant="danger" @click="clearForm">Reset</b-button>
     </b-form>
-
   </div>
 </template>
 
@@ -38,6 +36,7 @@ import axios from "axios";
 import config from "../config/config"
 
 const baseUrl = config.url + "/api";
+let counter = 0;      
 
 export default {
   name: "Register",
@@ -49,12 +48,11 @@ export default {
          {value: 'a', text: 'This is First option' 
 }
       ],
-
       user: {
         email: "",
-        password: ""
-      },
-      
+        password: "",
+        adminRole: "",
+      },            
       registrationSucceeded: false
     };
   },
@@ -65,11 +63,14 @@ export default {
     }
   },
 
-  methods: {
+  methods: {    
+
     registerUser() {
+      let params = new URLSearchParams();
+      params.append("admin", this.admin);
       if (this.isValidPassword && this.user.email.length > 1) {
-        axios
-          .post(baseUrl + "/auth/register", this.user)
+        axios         
+          .post(baseUrl + "/auth/register", this.user, params)
           .then(response => {
             if (response.data.success === true) {
               // redirect to login page, after small timeout
@@ -88,8 +89,11 @@ export default {
     clearForm() {
       this.user.email = "";
       this.user.password = "";
-    }
-  }
+      this.user.adminRole = false;
+    },
+    adminRole() {      
+      this.user.adminRole=!this.user.adminRole;      
+  }}
 };
 </script>
 

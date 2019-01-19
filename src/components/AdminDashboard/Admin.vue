@@ -22,7 +22,7 @@
                 <a @click="renderCanvasComponent"><i class="fas fa-edit"></i> Canvas</a>
             </li>
         </ul>
-    </nav>
+    </nav>    
 
     <div id="content">
           <nav class="navbar navbar-expand-lg navbar-light">
@@ -75,16 +75,13 @@ export default {
     },
     renderCanvasComponent () {
     this.$router.push('/canvas/edit')
-    } 
+    },
   },
-
   beforeMount() {
    this.admin = JSON.parse(localStorage.getItem("user"));
   }
 };
-
 </script>
-
 
 <style scoped>
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
