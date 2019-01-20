@@ -12,11 +12,11 @@ let router = new Router({
             name: 'Home',
             component: () => import('@/components/Home'),
         },
-        // {
-        //     path: '/register',
-        //     name: 'Register',
-        //     component: () => import('@/components/Home'),
-        // },
+        {
+             path: '/register',
+             name: 'Register',
+             component: () => import('@/components/Register'),
+        },
         {
             path: '/canvas',
             name: 'Canvas',

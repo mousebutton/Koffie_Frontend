@@ -1,7 +1,9 @@
 <template>
-<div id="home">
-  <b-img src="https://29leef3dgbjy2kwtvj410dqv-wpengine.netdna-ssl.com/wp-content/uploads/2018/02/Generic-Coffee-Header.jpg" fluid-grow alt="Fluid-Grow image"/>
 
+
+
+<div id="home">  
+  <b-img src="https://29leef3dgbjy2kwtvj410dqv-wpengine.netdna-ssl.com/wp-content/uploads/2018/02/Generic-Coffee-Header.jpg" fluid-grow alt="Fluid-Grow image"/>  
 <div v-if="showLogin" class="wrap fadeInDown">
   <div id="formContent">
     <div class="fadeIn first">
@@ -12,12 +14,12 @@
       <input type="text" id="login" class="fadeIn second" name="login" placeholder="Email" v-model="user.email">
       <input type="password" id="password" class="fadeIn third" name="login" placeholder="Password" v-model="user.password">
       <input type="submit" class="fadeIn fourth" value="Log In">
-    </form>
+      <br>
+    </form>     
   </div>
 </div>
 </div>
 </template>
-
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
@@ -91,15 +93,13 @@ export default {
         }
       }
     }
-  },
-    
+  },    
   mounted() {
    let token = localStorage.getItem("token");
    if (token != null) {
      this.showLogin = false;
    }
   },
-
 };
 </script>
 

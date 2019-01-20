@@ -1,5 +1,6 @@
 <template>
-<div class="container-fluid">
+
+<div class="container-fluid">  
     <div class="row">
         <div class="col-lg-6">
             <table class="table table-hover">
@@ -16,8 +17,9 @@
             </table>
         </div>
     </div>
-
+    <button @click="goToRegister">Register</button>
 </div>
+
 </template>
 
 <script>
@@ -48,9 +50,11 @@ export default {
         .catch(error => {
           console.log(error);
         });
-    },
-  },
-
+    },  
+    goToRegister() {
+    this.$router.push('/Register')     
+    console.log("log link")
+  }},
   beforeMount() {    
     this.getAllUsers();
   }
