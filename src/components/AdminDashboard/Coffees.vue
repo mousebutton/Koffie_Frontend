@@ -23,7 +23,8 @@
          </b-row>
         
          <b-row class="mb-1">
-            <b-form-file placeholder="Choose a image..." v-model="newDrink.imageUrl" accept="image/jpeg, image/png, image/gif" ref="fileinput"></b-form-file>
+            <b-form-file  placeholder="Choose a image..." @change="onFileSelected"
+             accept="image/jpeg, image/png, image/gif" ref="fileinput"></b-form-file>
          </b-row>
 
        </b-container>
@@ -69,6 +70,18 @@ export default {
   },
 
   methods: {
+
+       onFileSelected(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = event => {
+          this.newDrink.imageUrl = reader.result;
+          console.log(this.newDrink);
+        };
+   
+    },
+
     getAllDrinks(){
       axios
         .get(baseUrl + "/all")

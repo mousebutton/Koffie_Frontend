@@ -1,10 +1,10 @@
 export default class Drink {
 
     constructor(drink) {
+        console.log(drink);
         this.name = drink.name;
         if (drink.imageUrl != '') {
-            this.imageUrl = '/static/coffees/' + drink.imageUrl.name;
+            this.imageUrl =  drink.imageUrl;
         }
-        console.log(this);
     }
 }
