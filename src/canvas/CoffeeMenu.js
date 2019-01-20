@@ -249,8 +249,7 @@ export default class CoffeeMenu {
       img.selectable = false;
       img.originX = "center";
       img.originY = "center";
-      img.scaleX = 0.3;
-      img.scaleY = 0.3;
+      img.scaleToHeight(50);
       img.objectType = "coffee";
       img.coffeeType = coffeeType;
       img.id = this.currentId;

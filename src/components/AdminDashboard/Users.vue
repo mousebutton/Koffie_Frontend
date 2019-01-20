@@ -17,7 +17,7 @@
             </table>
         </div>
     </div>
-    <button @click="goToRegister">Register</button>
+    <b-btn @click="goToRegister">Register</b-btn>
 </div>
 
 </template>

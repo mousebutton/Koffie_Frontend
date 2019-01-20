@@ -143,4 +143,8 @@ export default {
 #errorMsg {
   color: red;
 }
+
+img {
+   max-width:100px;
+}
 </style>

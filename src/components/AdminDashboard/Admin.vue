@@ -18,9 +18,9 @@
             <li>
                 <a @click="renderCoffeeComponent"><i class="fas fa-coffee"></i> Drinks</a>
             </li>
-             <li>
+             <!-- <li>
                 <a @click="renderCanvasComponent"><i class="fas fa-edit"></i> Canvas</a>
-            </li>
+            </li> -->
         </ul>
     </nav>    
 
@@ -32,8 +32,7 @@
                 <i class="fas fa-align-left"></i>
                 <span>Sidebar</span>
             </button>
-
-        </div>
+            </div>
     </nav>
 
     <!--this router view will render the child components of the admin dashboard-->
@@ -72,10 +71,11 @@ export default {
 
     renderCoffeeComponent () {
         this.$router.push('/coffee')
-    },
-    renderCanvasComponent () {
-    this.$router.push('/canvas/edit')
-    },
+    }
+    ,
+    // renderCanvasComponent () {
+    // this.$router.push('/canvas/edit')
+    // },
   },
   beforeMount() {
    this.admin = JSON.parse(localStorage.getItem("user"));
@@ -106,6 +106,7 @@ a, a:hover, a:focus {
     text-decoration: none;
     transition: all 0.3s;  
 }
+
 
 .wrapper {
     font-family: 'Poppins', sans-serif;
@@ -146,6 +147,7 @@ a, a:hover, a:focus {
     color: #264653;
     background: #fff;
 }
+
 
 #sidebar.active {
     margin-left: -250px;

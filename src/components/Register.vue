@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <h4 id="successMessage" v-if="registrationSucceeded">Registration completed :-) you will be redirected to the login page</h4>
-    <h2 v-if="!registrationSucceeded">Create your account</h2>
-    <p v-if="!registrationSucceeded">Please fill out the required information</p>    
+    <h4 id="successMessage" v-if="registrationSucceeded">Registration completed, returning to user page</h4>
+    <h2 v-if="!registrationSucceeded">Create a new account</h2>
+    <p v-if="!registrationSucceeded">Please fill in the information</p>    
     <b-form id="registerForm" @submit.prevent="registerUser" v-if="!registrationSucceeded">
       <b-form-group>
         <b-form-input 
@@ -76,8 +76,8 @@ export default {
               // redirect to login page, after small timeout
               this.registrationSucceeded = true;
               setTimeout(() => {
-                this.$router.push("/login");
-              }, 3000);
+                this.$router.push("/users");
+              }, 2000);
             }
           })
           .catch(error => {

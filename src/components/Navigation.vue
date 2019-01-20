@@ -53,7 +53,7 @@ export default {
         : this.$router.push("/profile");
     },
     goToAdminDashboard() {
-      this.$router.push("/admin");
+      this.$router.push("/users");
     },
 
     countDownChanged(dismissCountDown) {
